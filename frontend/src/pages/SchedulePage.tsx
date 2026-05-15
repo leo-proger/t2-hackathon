@@ -1,15 +1,19 @@
 import { useState, useEffect, Fragment } from 'react'
-import { Coffee } from 'lucide-react'
+import { ChevronLeft, ChevronRight, CalendarDays, Coffee } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { RoomButton } from '@/components/RoomButton'
 import { TeacherButton } from '@/components/TeacherButton'
 import { SCHEDULE, SCHEDULE_DATE, LUNCH_BREAK } from '@/data/schedule'
-import { isLessonActive, isLessonPast, formatHumanDate, isToday } from '@/lib/schedule-utils'
+import { isLessonActive, isLessonPast, formatHumanDate, isToday, toIsoDate } from '@/lib/schedule-utils'
 import { cn } from '@/lib/utils'
 import type { Lesson, LessonKind } from '@/types'
 
 const LUNCH_INDEX = 3 // обед вставляется ПЕРЕД 4-й парой (индекс 3)
 
 export function SchedulePage() {
+  // По умолчанию открываем день, в котором есть пары (16 мая)
+  const [date, setDate] = useState<Date>(() => new Date(SCHEDULE_DATE))
+
   // Часы тикают каждую минуту чтобы подсветка активной пары была актуальной
   const [, setTick] = useState(0)
   useEffect(() => {
@@ -17,26 +21,63 @@ export function SchedulePage() {
     return () => clearInterval(id)
   }, [])
 
-  const showStatus = isToday(SCHEDULE_DATE)
+  function shiftDate(days: number) {
+    setDate((d) => {
+      const next = new Date(d)
+      next.setDate(d.getDate() + days)
+      return next
+    })
+  }
+
+  // Пары сейчас есть только в один день (заглушка)
+  const hasLessons = toIsoDate(date) === toIsoDate(SCHEDULE_DATE)
+  const lessons = hasLessons ? SCHEDULE : []
+  const showStatus = isToday(date)
 
   return (
     <main className="p-4 md:p-6 max-w-4xl mx-auto">
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Расписание</h1>
-        <p className="text-sm text-muted-foreground mt-0.5 capitalize">
-          {formatHumanDate(SCHEDULE_DATE)}
-          {showStatus && <span className="ml-2 text-primary font-medium">· сегодня</span>}
-        </p>
+      {/* Заголовок + переключатель даты */}
+      <header className="flex items-center justify-between mb-6">
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">Расписание</h1>
+          <p className="text-sm text-muted-foreground mt-0.5 capitalize">
+            {formatHumanDate(date)}
+            {showStatus && <span className="ml-2 text-primary font-medium">· сегодня</span>}
+          </p>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <Button variant="outline" size="icon" onClick={() => shiftDate(-1)} aria-label="Предыдущий день">
+            <ChevronLeft size={16} />
+          </Button>
+          <Button
+            variant={showStatus ? 'secondary' : 'outline'}
+            size="sm"
+            onClick={() => setDate(new Date())}
+            className="gap-1.5"
+          >
+            <CalendarDays size={14} />
+            Сегодня
+          </Button>
+          <Button variant="outline" size="icon" onClick={() => shiftDate(1)} aria-label="Следующий день">
+            <ChevronRight size={16} />
+          </Button>
+        </div>
       </header>
 
-      <ul className="flex flex-col gap-2.5">
-        {SCHEDULE.map((lesson, i) => (
-          <Fragment key={lesson.id}>
-            {i === LUNCH_INDEX && <LunchBreak />}
-            <LessonItem lesson={lesson} showStatus={showStatus} />
-          </Fragment>
-        ))}
-      </ul>
+      {/* Список пар */}
+      {lessons.length === 0 ? (
+        <EmptyDay />
+      ) : (
+        <ul className="flex flex-col gap-2.5">
+          {lessons.map((lesson, i) => (
+            <Fragment key={lesson.id}>
+              {i === LUNCH_INDEX && <LunchBreak />}
+              <LessonItem lesson={lesson} showStatus={showStatus} />
+            </Fragment>
+          ))}
+        </ul>
+      )}
     </main>
   )
 }
@@ -108,7 +149,7 @@ function LessonItem({ lesson, showStatus }: { lesson: Lesson; showStatus: boolea
   )
 }
 
-// ─── Бейдж типа занятия (лекция / практика / лабораторная) ──────────────────
+// ─── Бейдж типа занятия ─────────────────────────────────────────────────────
 
 const KIND_STYLES: Record<LessonKind, string> = {
   'лекция':       'bg-primary/15 text-primary',
@@ -137,6 +178,18 @@ function LunchBreak() {
       <Coffee size={14} className="text-amber-600" />
       <span className="font-medium">Обеденный перерыв</span>
       <span className="tabular-nums">{LUNCH_BREAK.start}–{LUNCH_BREAK.end}</span>
+    </div>
+  )
+}
+
+// ─── Пустой день ────────────────────────────────────────────────────────────
+
+function EmptyDay() {
+  return (
+    <div className="rounded-2xl border border-dashed border-border bg-card/50 p-12 flex flex-col items-center text-center">
+      <CalendarDays size={32} className="text-muted-foreground/60 mb-3" />
+      <p className="text-foreground font-medium">Пар нет</p>
+      <p className="text-[13px] text-muted-foreground mt-1">В этот день пары не запланированы 😌</p>
     </div>
   )
 }

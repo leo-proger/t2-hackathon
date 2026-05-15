@@ -5,7 +5,7 @@
     "fullName": "Киприна Лариса Юрьевна",
     "position": "Заведующая кафедрой",
     "credentials": "Кандидат технических наук, доцент",
-    "photoUrl": ""
+    "photoUrl": "/teachers/Киприна.jpg"
   },
   "zverev": {
     "id": "zverev",
@@ -13,7 +13,7 @@
     "fullName": "Зверев Кирилл Александрович",
     "position": "Доцент кафедры",
     "credentials": "Кандидат исторических наук",
-    "photoUrl": ""
+    "photoUrl": "/teachers/зверев.jpg"
   },
   "demchinova": {
     "id": "demchinova",
@@ -21,7 +21,7 @@
     "fullName": "Демчинова Евгения Александровна",
     "position": "Старший преподаватель кафедры",
     "credentials": "",
-    "photoUrl": ""
+    "photoUrl": "/teachers/Демчинова.jpg"
   },
   "katerzhina": {
     "id": "katerzhina",
@@ -29,7 +29,7 @@
     "fullName": "Катержина Светлана Фёдоровна",
     "position": "Директор института. Доцент кафедры высшей математики",
     "credentials": "Кандидат педагогических наук, доцент",
-    "photoUrl": ""
+    "photoUrl": "/teachers/Катержина.jpg"
   },
   "sobashko": {
     "id": "sobashko",
@@ -37,6 +37,6 @@
     "fullName": "Собашко Юлия Александровна",
     "position": "Директор образовательного Центра",
     "credentials": "Кандидат технических наук",
-    "photoUrl": ""
+    "photoUrl": "/teachers/Собашко.jpg"
   }
 }

@@ -2,7 +2,7 @@ import { FLOOR_PLANS } from '@/data/floorPlans'
 
 interface Props {
   floor: number
-  /** id аудитории, которую нужно подсветить (например "214") */
+  /** id аудитории (например "407") */
   highlightRoom?: string
 }
 
@@ -17,47 +17,76 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
   }
 
   const target = highlightRoom ? plan.rooms.find((r) => r.id === highlightRoom) : null
-  // Если комната у верхнего края — маркер показываем снизу, чтобы он не вылез за фотку
-  const markerOnTop = target ? target.y >= 18 : true
 
   return (
-    <div className="relative w-full" style={{ aspectRatio: plan.aspectRatio }}>
-      {/* Сама фотка + подсветка живут в overflow-hidden, чтобы dim-ring не вылезал */}
-      <div className="absolute inset-0 rounded-xl overflow-hidden bg-sky-100">
-        <img
-          src={plan.src}
-          alt={`Схема ${plan.floor} этажа`}
-          className="absolute inset-0 w-full h-full object-contain select-none"
-          draggable={false}
-        />
-        {target && (
-          <div
-            className="absolute pointer-events-none rounded-sm ring-[3px] ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.30)] animate-[pulse_2s_ease-in-out_infinite]"
-            style={{
-              left: `${target.x}%`,
-              top: `${target.y}%`,
-              width: `${target.w}%`,
-              height: `${target.h}%`,
-              background: 'oklch(0.56 0.215 262 / 0.15)',
-            }}
-          />
-        )}
-      </div>
+    <div
+      className="relative w-full rounded-xl overflow-hidden bg-sky-100"
+      style={{ aspectRatio: plan.aspectRatio }}
+    >
+      <img
+        src={plan.src}
+        alt={`Схема ${plan.floor} этажа`}
+        className="absolute inset-0 w-full h-full object-contain select-none"
+        draggable={false}
+      />
 
-      {/* Маленький маркер — точечка с подписью у одного из углов комнаты */}
+      {/* SVG-оверлей с подсветкой целевой комнаты.
+          preserveAspectRatio="none" — растягивает viewBox под размер контейнера,
+          поэтому координаты в % картинки работают 1-в-1. */}
       {target && (
-        <span
-          className="absolute z-20 whitespace-nowrap bg-primary text-primary-foreground text-[10px] font-semibold px-1.5 py-0.5 rounded shadow-md pointer-events-none flex items-center gap-1"
-          style={{
-            left: `${target.x + target.w / 2}%`,
-            top: markerOnTop
-              ? `calc(${target.y}% - 22px)`
-              : `calc(${target.y + target.h}% + 4px)`,
-            transform: 'translateX(-50%)',
-          }}
+        <svg
+          className="absolute inset-0 w-full h-full pointer-events-none"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
         >
-          {markerOnTop ? '▼' : '▲'} здесь
-        </span>
+          <defs>
+            {/* Лёгкое свечение вокруг комнаты */}
+            <filter id="room-glow" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="0.6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Маска: затемняем всё, кроме целевой комнаты */}
+          <mask id="dim-mask">
+            <rect x="0" y="0" width="100" height="100" fill="white" />
+            <rect
+              x={target.x}
+              y={target.y}
+              width={target.w}
+              height={target.h}
+              fill="black"
+            />
+          </mask>
+          <rect
+            x="0" y="0" width="100" height="100"
+            fill="rgba(0,0,0,0.35)"
+            mask="url(#dim-mask)"
+          />
+
+          {/* Подсветка целевой комнаты */}
+          <rect
+            x={target.x}
+            y={target.y}
+            width={target.w}
+            height={target.h}
+            fill="oklch(0.56 0.215 262 / 0.42)"
+            stroke="oklch(0.56 0.215 262)"
+            strokeWidth="3"
+            vectorEffect="non-scaling-stroke"
+            filter="url(#room-glow)"
+          >
+            <animate
+              attributeName="fill-opacity"
+              values="1; 0.55; 1"
+              dur="2.2s"
+              repeatCount="indefinite"
+            />
+          </rect>
+        </svg>
       )}
     </div>
   )

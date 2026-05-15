@@ -1,14 +1,15 @@
+import { NavLink as RouterLink } from 'react-router-dom'
 import { Sparkles, Zap } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { useUser } from '@/hooks/useUser'
 
 const NAV_LINKS = [
-  { label: 'Главная', href: '#', active: true },
-  { label: 'Расписание', href: '#' },
-  { label: 'Квесты', href: '#' },
-  { label: 'Корпус', href: '#' },
-  { label: 'Куратор', href: '#' },
+  { label: 'Главная',    to: '/' },
+  { label: 'Расписание', to: '/schedule' },
+  { label: 'Квесты',     to: '/quests' },
+  { label: 'Корпус',     to: '/campus' },
+  { label: 'Куратор',    to: '/tutor' },
 ]
 
 export function Navbar() {
@@ -16,16 +17,30 @@ export function Navbar() {
 
   return (
     <nav className="flex items-center justify-between px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/80 sticky top-0 z-50">
-      <div className="flex items-center gap-2">
+      <RouterLink to="/" className="flex items-center gap-2">
         <Sparkles className="text-primary" size={18} />
         <span className="text-[15px] font-semibold tracking-tight text-foreground">
           Chatt<span className="text-primary">ie</span>
         </span>
-      </div>
+      </RouterLink>
 
       <div className="flex items-center gap-1">
         {NAV_LINKS.map((link) => (
-          <NavLink key={link.label} label={link.label} href={link.href} active={link.active} />
+          <RouterLink
+            key={link.to}
+            to={link.to}
+            end={link.to === '/'}
+            className={({ isActive }) =>
+              cn(
+                'px-3 py-1.5 rounded-lg text-[13px] transition-colors duration-150 font-medium',
+                isActive
+                  ? 'bg-accent text-accent-foreground'
+                  : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
+              )
+            }
+          >
+            {link.label}
+          </RouterLink>
         ))}
       </div>
 
@@ -38,22 +53,6 @@ export function Navbar() {
         </Avatar>
       </div>
     </nav>
-  )
-}
-
-function NavLink({ label, href, active }: { label: string; href: string; active?: boolean }) {
-  return (
-    <a
-      href={href}
-      className={cn(
-        'px-3 py-1.5 rounded-lg text-[13px] transition-colors duration-150 font-medium',
-        active
-          ? 'bg-accent text-accent-foreground'
-          : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground'
-      )}
-    >
-      {label}
-    </a>
   )
 }
 

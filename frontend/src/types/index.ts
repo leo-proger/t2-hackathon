@@ -19,10 +19,11 @@ export interface User {
 
 export interface Lesson {
   id: string
-  time: string    // "8:30"
+  time: string      // "8:30" — начало пары
+  endTime: string   // "10:00" — конец пары
   name: string
   room: string
-  teacher: string
+  teacher: string   // "Иванова Л.А."
 }
 
 // ─── Quests ───────────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { RoomButton } from '@/components/RoomButton'
 import { TeacherButton } from '@/components/TeacherButton'
 import { SCHEDULE, SCHEDULE_DATE, LUNCH_BREAK } from '@/data/schedule'
-import { isLessonActive, isLessonPast, formatHumanDate, isToday, toIsoDate } from '@/lib/schedule-utils'
+import { isLessonActive, isLessonPast, formatHumanDate, isToday, isSameDay } from '@/lib/schedule-utils'
 import { cn } from '@/lib/utils'
 import type { Lesson, LessonKind } from '@/types'
 
@@ -30,8 +30,7 @@ export function SchedulePage() {
   }
 
   // Пары сейчас есть только в один день (заглушка)
-  const hasLessons = toIsoDate(date) === toIsoDate(SCHEDULE_DATE)
-  const lessons = hasLessons ? SCHEDULE : []
+  const lessons = isSameDay(date, SCHEDULE_DATE) ? SCHEDULE : []
   const showStatus = isToday(date)
 
   return (

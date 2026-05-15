@@ -19,9 +19,19 @@ export function isLessonPast(lesson: Lesson, now: Date = new Date()): boolean {
   return parseTimeToMinutes(lesson.endTime) <= now.getHours() * 60 + now.getMinutes()
 }
 
-/** YYYY-MM-DD из Date */
+/** YYYY-MM-DD из Date в ЛОКАЛЬНОЙ таймзоне (не UTC). */
 export function toIsoDate(d: Date): string {
-  return d.toISOString().slice(0, 10)
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+/** Один и тот же календарный день? */
+export function isSameDay(a: Date, b: Date): boolean {
+  return a.getFullYear() === b.getFullYear()
+    && a.getMonth() === b.getMonth()
+    && a.getDate() === b.getDate()
 }
 
 const WEEKDAYS = ['воскресенье', 'понедельник', 'вторник', 'среда', 'четверг', 'пятница', 'суббота']

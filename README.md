@@ -56,7 +56,7 @@ npm run dev
 [
   {
     "id": "l1",
-    "time": "8:30",
+    "lesson_number": 1,
     "name": "Математический анализ",
     "room": "ауд. 214",
     "teacher": "Иванова Л.А."

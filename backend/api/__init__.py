@@ -32,7 +32,7 @@ async def add_base():
         group="",
         groupID=0,
 
-        name="Altron1423",
+        name="ThisIsName",
         surname="",
         faculty="ИВИТШ",
         year=0,
@@ -45,7 +45,7 @@ async def add_base():
         language=None,
         status=StatusEnum.zero,
         passwordHash="ecb252044b5ea0f679ee78ec1a12904739e2904d",
-        email='altron1423@gmail.com',
+        email='user@example.com',
         date_of_birth=None
     ))
     await session.commit()

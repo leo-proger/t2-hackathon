@@ -168,7 +168,4 @@ async def me(request: Request, session: SessionDep):
     result = await session.execute(query)
     result = result.unique().scalars().all()[0]
 
-    print(type(result))
-    print(result)
-
     return UserMeMapper.to_schem(result)

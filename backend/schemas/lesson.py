@@ -17,6 +17,7 @@ class LessonSchema(BaseModel):
     teacher: str
     auditorium: str
     groupID: int
+    group: str
     lesson_number: int
 
     color: str
@@ -24,6 +25,12 @@ class LessonSchema(BaseModel):
 class LessonDateSchema(BaseModel):
     date: datetime.date
 
+class LessonSchemaResponse(BaseModel):
+    id: int
+    lesson_number: int
+    name: str
+    room: str
+    teacher: str
 
 class LessonFilterSchema(BaseModel):
     date: datetime.date | None

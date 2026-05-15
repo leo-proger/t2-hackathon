@@ -30,6 +30,7 @@ class LessonModel(Base):
 
     week_type: Mapped[int]
     subgroup: Mapped[int]
+
     hour: Mapped[float | None]
     name: Mapped[str]
 

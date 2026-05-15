@@ -1,0 +1,28 @@
+import datetime
+
+from pydantic import BaseModel, EmailStr
+
+
+class UserCreateSchema(BaseModel):
+    groupID: int
+    subgroup: int
+    email: EmailStr
+
+
+class UserNewDataSchema(BaseModel):
+
+    # fullName: str | None
+    surname: str# | None
+    name: str# | None
+    middle_name: str# | None
+
+    date_of_birth: datetime.date# | None
+
+
+class UserLoginSchema(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserResetPassword(BaseModel):
+    old_password: str
+    new_password: str

@@ -5,11 +5,12 @@ import { cn } from '@/lib/utils'
 import { useUser } from '@/hooks/useUser'
 
 const NAV_LINKS = [
-  { label: 'Главная',    to: '/' },
-  { label: 'Расписание', to: '/schedule' },
-  { label: 'Квесты',     to: '/quests' },
-  { label: 'Корпус',     to: '/campus' },
-  { label: 'Куратор',    to: '/tutor' },
+  { label: 'Главная',     to: '/' },
+  { label: 'Расписание',  to: '/schedule' },
+  { label: 'Инструкция',  to: '/guide' },
+  { label: 'Квесты',      to: '/quests' },
+  { label: 'Корпус',      to: '/campus' },
+  { label: 'Куратор',     to: '/tutor' },
 ]
 
 export function Navbar() {

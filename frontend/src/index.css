@@ -95,3 +95,31 @@ body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+
+/* ─── Стили текста внутри секций инструкции первокурсника ──────────────── */
+.guide-content {
+  font-size: 14px;
+  line-height: 1.65;
+  color: var(--foreground);
+}
+.guide-content p { margin: 0 0 0.6em 0; }
+.guide-content p:last-child { margin-bottom: 0; }
+.guide-content ul, .guide-content ol {
+  margin: 0 0 0.6em 0;
+  padding-left: 1.4em;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+}
+.guide-content ul:last-child, .guide-content ol:last-child { margin-bottom: 0; }
+.guide-content ul { list-style: disc; }
+.guide-content ol { list-style: decimal; }
+.guide-content ul li::marker { color: oklch(0.56 0.215 262); }
+.guide-content ol li::marker { font-weight: 600; }
+.guide-content strong { font-weight: 600; color: var(--foreground); }
+.guide-content em { color: var(--muted-foreground); font-style: normal; font-size: 12px; }
+.guide-content a { color: oklch(0.56 0.215 262); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Цветные маркеры для нумерованных списков по секциям */
+.guide-emerald ol li::marker, .guide-emerald ul li::marker { color: oklch(0.55 0.18 145); }
+.guide-amber  ol li::marker, .guide-amber  ul li::marker { color: oklch(0.65 0.16 75);  }

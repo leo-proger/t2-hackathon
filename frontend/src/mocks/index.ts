@@ -22,11 +22,11 @@ export const mockUser: User = {
 }
 
 export const mockLessons: Lesson[] = [
-  { id: 'l1', time: '8:30',  endTime: '10:00', name: 'Математический анализ', room: 'ауд. 214',  teacher: 'Иванова Л.А.' },
-  { id: 'l2', time: '10:10', endTime: '11:40', name: 'Программирование',       room: 'ауд. 301',  teacher: 'Петров А.В.' },
-  { id: 'l3', time: '11:50', endTime: '13:20', name: 'Английский язык',        room: 'ауд. 405',  teacher: 'Соколова М.Н.' },
-  { id: 'l4', time: '14:00', endTime: '15:30', name: 'Физкультура',            room: 'спортзал',  teacher: 'Громов О.С.' },
-  { id: 'l5', time: '15:40', endTime: '17:10', name: 'Дискретная математика',  room: 'ауд. 218',  teacher: 'Морозов К.Е.' },
+  { id: 'l1', time: '8:30',  endTime: '10:00', name: 'Математический анализ', room: '214',      teacher: 'Иванова Л.А.' },
+  { id: 'l2', time: '10:10', endTime: '11:40', name: 'Программирование',       room: '301',      teacher: 'Петров А.В.' },
+  { id: 'l3', time: '11:50', endTime: '13:20', name: 'Английский язык',        room: '209',      teacher: 'Соколова М.Н.' },
+  { id: 'l4', time: '14:00', endTime: '15:30', name: 'Физкультура',            room: 'спортзал', teacher: 'Громов О.С.' },
+  { id: 'l5', time: '15:40', endTime: '17:10', name: 'Дискретная математика',  room: '407',      teacher: 'Морозов К.Е.' },
 ]
 
 export const mockQuests: Quest[] = [

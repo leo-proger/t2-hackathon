@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { ChevronLeft, ChevronRight, MapPin, User as UserIcon, Clock, CalendarDays } from 'lucide-react'
+import { ChevronLeft, ChevronRight, User as UserIcon, Clock, CalendarDays } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { RoomButton } from '@/components/RoomButton'
 import { useScheduleByDate } from '@/hooks/useSchedule'
 import { isLessonActive, isLessonPast, formatHumanDate, isToday, toIsoDate } from '@/lib/schedule-utils'
 import { cn } from '@/lib/utils'
@@ -126,11 +127,8 @@ function LessonItem({ lesson, showStatus }: LessonItemProps) {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-x-4 gap-y-1 mt-2 text-[13px] text-muted-foreground">
-          <span className="flex items-center gap-1.5">
-            <MapPin size={13} />
-            {lesson.room}
-          </span>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-2 text-[13px] text-muted-foreground">
+          <RoomButton room={lesson.room} />
           {lesson.teacher && (
             <span className="flex items-center gap-1.5">
               <UserIcon size={13} />

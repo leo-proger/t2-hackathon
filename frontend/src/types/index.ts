@@ -17,13 +17,17 @@ export interface User {
 
 // ─── Schedule ─────────────────────────────────────────────────────────────────
 
+export type LessonKind = 'лекция' | 'практика' | 'лабораторная'
+
 export interface Lesson {
   id: string
-  time: string      // "8:30" — начало пары
-  endTime: string   // "10:00" — конец пары
-  name: string
-  room: string
-  teacher: string   // "Иванова Л.А."
+  time: string         // "8:30" — начало пары
+  endTime: string      // "10:00" — конец пары
+  kind: LessonKind     // тип занятия
+  name: string         // название предмета
+  subgroup?: string    // "п/г 1" — для лаб
+  room: string         // "Б-407" — с префиксом корпуса
+  teacherId: string    // ссылка на teachers.json (например "kiprina")
 }
 
 // ─── Quests ───────────────────────────────────────────────────────────────────

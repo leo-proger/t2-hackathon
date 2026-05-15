@@ -1,5 +1,4 @@
 import { useUser } from '@/hooks/useUser'
-import { useSchedule } from '@/hooks/useSchedule'
 import { useQuests } from '@/hooks/useQuests'
 import { useChecklist } from '@/hooks/useChecklist'
 import { useDailyTask } from '@/hooks/useDailyTask'
@@ -13,7 +12,6 @@ import { QuestsCard } from '@/components/dashboard/QuestsCard'
 
 export function DashboardPage() {
   const user = useUser()
-  const schedule = useSchedule()
   const quests = useQuests()
   const checklist = useChecklist()
   const dailyTask = useDailyTask()
@@ -41,7 +39,7 @@ export function DashboardPage() {
         </div>
 
         <div style={{ gridColumn: 'span 4', gridRow: 'span 2' }}>
-          <ScheduleCard lessons={schedule.data ?? []} loading={schedule.loading} />
+          <ScheduleCard />
         </div>
 
         <div style={{ gridColumn: 'span 5', gridRow: 'span 3' }}>

@@ -32,31 +32,31 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
         />
         {target && (
           <div
-            className="absolute pointer-events-none rounded-md ring-4 ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.25)] animate-[pulse_2s_ease-in-out_infinite]"
+            className="absolute pointer-events-none rounded-sm ring-[3px] ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.30)] animate-[pulse_2s_ease-in-out_infinite]"
             style={{
               left: `${target.x}%`,
               top: `${target.y}%`,
               width: `${target.w}%`,
               height: `${target.h}%`,
-              background: 'oklch(0.56 0.215 262 / 0.18)',
+              background: 'oklch(0.56 0.215 262 / 0.15)',
             }}
           />
         )}
       </div>
 
-      {/* Маркер «вот сюда» вне overflow-hidden, чтобы не обрезался */}
+      {/* Маленький маркер — точечка с подписью у одного из углов комнаты */}
       {target && (
         <span
-          className="absolute z-20 whitespace-nowrap bg-primary text-primary-foreground text-[11px] font-semibold px-2 py-0.5 rounded-full shadow-md pointer-events-none"
+          className="absolute z-20 whitespace-nowrap bg-primary text-primary-foreground text-[10px] font-semibold px-1.5 py-0.5 rounded shadow-md pointer-events-none flex items-center gap-1"
           style={{
             left: `${target.x + target.w / 2}%`,
             top: markerOnTop
-              ? `calc(${target.y}% - 26px)`
-              : `calc(${target.y + target.h}% + 6px)`,
+              ? `calc(${target.y}% - 22px)`
+              : `calc(${target.y + target.h}% + 4px)`,
             transform: 'translateX(-50%)',
           }}
         >
-          {markerOnTop ? '▼' : '▲'} вот сюда
+          {markerOnTop ? '▼' : '▲'} здесь
         </span>
       )}
     </div>

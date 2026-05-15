@@ -39,13 +39,13 @@ export const FLOOR_PLANS: FloorPlanData[] = [
       { id: '203', x: 69, y: 28, w: 10, h: 22 },
       { id: '201', x: 79, y: 28, w: 13, h: 22 },
       { id: '216', x: 7,  y: 54, w: 19, h: 11 },
-      { id: '214', x: 7,  y: 65, w: 19, h: 30 },
-      { id: '212', x: 26, y: 65, w: 11, h: 30 },
-      { id: '210', x: 37, y: 54, w: 5,  h: 41 },
-      { id: '208', x: 42, y: 65, w: 13, h: 30 },
-      { id: '206', x: 55, y: 65, w: 13, h: 30 },
-      { id: '204', x: 68, y: 65, w: 11, h: 30 },
-      { id: '202', x: 79, y: 65, w: 13, h: 30 },
+      { id: '214', x: 7,  y: 66, w: 19, h: 25 },
+      { id: '212', x: 26, y: 66, w: 11, h: 25 },
+      { id: '210', x: 37, y: 56, w: 5,  h: 35 },
+      { id: '208', x: 42, y: 66, w: 13, h: 25 },
+      { id: '206', x: 55, y: 66, w: 13, h: 25 },
+      { id: '204', x: 68, y: 66, w: 11, h: 25 },
+      { id: '202', x: 79, y: 66, w: 13, h: 25 },
     ],
   },
   {
@@ -96,7 +96,11 @@ export function getFloorByRoom(room: string): number | null {
   return null
 }
 
-/** "ауд. 214" / "214₂" → "214" */
+/** "ауд. 214" / "Б-214" / "214₂" → "214" */
 export function normalizeRoomId(room: string): string {
-  return room.replace(/ауд\.?\s*/i, '').replace(/[₀-₉]/g, '').trim()
+  return room
+    .replace(/ауд\.?\s*/i, '')
+    .replace(/^[А-Яа-я]+\s*-\s*/, '')   // "Б-407" → "407"
+    .replace(/[₀-₉]/g, '')
+    .trim()
 }

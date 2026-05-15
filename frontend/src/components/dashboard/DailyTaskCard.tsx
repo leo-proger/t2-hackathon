@@ -1,15 +1,9 @@
 import { Zap, Clock, Camera } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 
 export function DailyTaskCard() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.1 }}
-      className="rounded-2xl border border-border bg-card p-5 flex flex-col h-full"
-    >
+    <div className="rounded-2xl border border-border bg-card p-5 flex flex-col h-full">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
         Задание дня
       </p>
@@ -35,6 +29,6 @@ export function DailyTaskCard() {
         <Camera size={13} />
         Загрузить фото
       </Button>
-    </motion.div>
+    </div>
   )
 }

@@ -1,5 +1,4 @@
 import { CheckCircle2, Clock } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 
@@ -13,16 +12,11 @@ export function WelcomeCard() {
   const progress = 62
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.05 }}
-      className="rounded-2xl border border-primary/20 bg-primary/8 p-5 flex flex-col h-full overflow-hidden"
-    >
+    <div className="rounded-2xl border border-primary/20 bg-primary/8 p-5 flex flex-col h-full overflow-hidden">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-primary/70 mb-1">
         Добро пожаловать
       </p>
-      <h2 className="text-xl font-semibold text-primary-foreground/90" style={{ color: 'oklch(0.35 0.15 262)' }}>
+      <h2 className="text-xl font-semibold" style={{ color: 'oklch(0.35 0.15 262)' }}>
         Привет, Артём 👋
       </h2>
       <p className="text-[12px] mt-0.5 mb-4" style={{ color: 'oklch(0.50 0.12 262)' }}>
@@ -52,7 +46,7 @@ export function WelcomeCard() {
           <StatusTag key={item.label} label={item.label} done={item.done} />
         ))}
       </div>
-    </motion.div>
+    </div>
   )
 }
 

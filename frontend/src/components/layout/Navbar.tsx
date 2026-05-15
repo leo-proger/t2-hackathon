@@ -1,5 +1,4 @@
 import { Sparkles, Zap } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 
@@ -13,12 +12,7 @@ const NAV_LINKS = [
 
 export function Navbar() {
   return (
-    <motion.nav
-      initial={{ y: -16, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.35, ease: 'easeOut' }}
-      className="flex items-center justify-between px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/80 sticky top-0 z-50"
-    >
+    <nav className="flex items-center justify-between px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/80 sticky top-0 z-50">
       {/* Logo */}
       <div className="flex items-center gap-2">
         <Sparkles className="text-primary" size={18} />
@@ -41,7 +35,7 @@ export function Navbar() {
           <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">АИ</AvatarFallback>
         </Avatar>
       </div>
-    </motion.nav>
+    </nav>
   )
 }
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Send, Bot, User } from 'lucide-react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 
 interface Message {
@@ -27,7 +27,6 @@ export function ChatCard() {
     if (!trimmed) return
     setMessages((prev) => [...prev, { id: Date.now(), role: 'user', text: trimmed }])
     setInput('')
-    // Placeholder bot reply
     setTimeout(() => {
       setMessages((prev) => [
         ...prev,
@@ -44,30 +43,27 @@ export function ChatCard() {
   }
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: 0.22 }}
-      className="rounded-2xl border border-border bg-card p-5 flex flex-col h-full"
-    >
+    <div className="rounded-2xl border border-border bg-card p-5 flex flex-col h-full">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-3">
         Chattie — спроси что угодно
       </p>
 
-      {/* Messages */}
       <div className="flex-1 flex flex-col gap-2 overflow-y-auto min-h-0">
+        {/* AnimatePresence только для новых сообщений от пользователя */}
         <AnimatePresence initial={false}>
           {messages.map((msg) => (
             <motion.div
               key={msg.id}
-              initial={{ opacity: 0, y: 8 }}
+              initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2 }}
+              transition={{ duration: 0.18 }}
               className={`flex gap-2 items-start ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}
             >
-              <div className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-0.5 ${
-                msg.role === 'bot' ? 'bg-primary/15 text-primary' : 'bg-secondary'
-              }`}>
+              <div
+                className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full mt-0.5 ${
+                  msg.role === 'bot' ? 'bg-primary/15 text-primary' : 'bg-secondary'
+                }`}
+              >
                 {msg.role === 'bot'
                   ? <Bot size={10} />
                   : <User size={10} className="text-muted-foreground" />}
@@ -86,7 +82,6 @@ export function ChatCard() {
         </AnimatePresence>
       </div>
 
-      {/* Input */}
       <div className="flex gap-2 mt-3">
         <input
           value={input}
@@ -99,6 +94,6 @@ export function ChatCard() {
           <Send size={13} />
         </Button>
       </div>
-    </motion.div>
+    </div>
   )
 }

@@ -1,133 +1,93 @@
-// Схемы этажей ИВИТШ. Координаты в условной 14x4 сетке (col x row).
-// type: 'room' — пронумерованная аудитория (главная цель навигации)
-//       'service' — служебное помещение
-//       'wc' — туалет (показываем иконкой)
-//       'stairs' — лестница (показываем иконкой)
+// Карты этажей ИВИТШ — реальные фотки с наложенной подсветкой по координатам.
+// Bounding boxes (x, y, w, h) указаны в процентах от размеров картинки.
 
-export type RoomType = 'room' | 'service' | 'wc' | 'stairs'
-
-export interface FloorRoom {
-  id: string          // "214" или "it-uley"
-  label: string       // "214" или "ИТ-Улей"
-  sublabel?: string   // "кафедра прикладной математики и информационных технологий"
-  col: number         // grid column start (1-based)
-  colSpan: number
-  row: number         // 1 или 2
-  rowSpan?: number
-  type: RoomType
+export interface RoomBox {
+  id: string         // "214", "301" — должно совпадать с lesson.room
+  x: number          // left, %
+  y: number          // top, %
+  w: number          // width, %
+  h: number          // height, %
 }
 
-export interface FloorPlan {
+export interface FloorPlanData {
   floor: number
-  cols: number        // grid columns
-  rows: number
-  rooms: FloorRoom[]
+  src: string                                  // /floors/floor-N.png
+  aspectRatio: string                          // "1080/474" — для CSS aspect-ratio
+  rooms: RoomBox[]
 }
 
-// Координаты подобраны "на глаз" по фоткам — для общего ориентира студента,
-// а не для пиксель-перфекта.
-
-export const FLOOR_PLANS: FloorPlan[] = [
+export const FLOOR_PLANS: FloorPlanData[] = [
   {
     floor: 1,
-    cols: 12,
-    rows: 2,
+    src: '/floors/floor-1.png',
+    aspectRatio: '1080 / 474',
     rooms: [
-      // Верхний ряд
-      { id: '111',     label: '111₂',     col: 1,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'wc-1-l',  label: 'WC',        col: 3,  colSpan: 1, row: 1, type: 'wc' },
-      { id: 'st-1-l',  label: '↕',         col: 4,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: 'it-uley', label: 'ИТ-Улей',   col: 5,  colSpan: 4, row: 1, type: 'service' },
-      { id: 'st-1-r',  label: '↕',         col: 9,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: 'wc-1-r',  label: 'WC',        col: 10, colSpan: 1, row: 1, type: 'wc' },
-      { id: '001',     label: '001₂',     col: 11, colSpan: 2, row: 1, type: 'room' },
-      // Нижний ряд
-      { id: '8bit',    label: '8 бит',     sublabel: 'игровая', col: 1, colSpan: 3, row: 2, type: 'service' },
-      { id: '110',     label: '110₂',     sublabel: 'серверная', col: 4,  colSpan: 1, row: 2, type: 'service' },
-      { id: 'firewall', label: 'файрвол',  col: 5,  colSpan: 1, row: 2, type: 'service' },
-      { id: 'archive',  label: 'архиватор', col: 6,  colSpan: 2, row: 2, type: 'service' },
-      { id: '100',     label: '100₂',     col: 8,  colSpan: 2, row: 2, type: 'room' },
-      { id: '010',     label: '010₂',     col: 10, colSpan: 3, row: 2, type: 'room' },
+      { id: '111', x: 8,  y: 22, w: 20, h: 22 },
+      { id: '001', x: 71, y: 22, w: 21, h: 22 },
+      { id: '100', x: 65, y: 42, w: 13, h: 22 },
+      { id: '010', x: 79, y: 42, w: 13, h: 22 },
     ],
   },
   {
     floor: 2,
-    cols: 14,
-    rows: 2,
+    src: '/floors/floor-2.png',
+    aspectRatio: '1080 / 393',
     rooms: [
-      // Верхний ряд
-      { id: '215', label: '215', sublabel: 'кафедра прикладной математики', col: 1,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'wc-2-l',  label: 'WC', col: 3,  colSpan: 1, row: 1, type: 'wc' },
-      { id: 'st-2-l',  label: '↕',  col: 4,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: '209', label: '209', sublabel: 'дирекция', col: 5,  colSpan: 2, row: 1, type: 'room' },
-      { id: '207', label: '207',                       col: 7,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'st-2-r',  label: '↕',  col: 9,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: 'wc-2-r',  label: 'WC', col: 10, colSpan: 1, row: 1, type: 'wc' },
-      { id: '203', label: '203',                       col: 11, colSpan: 2, row: 1, type: 'room' },
-      { id: '201', label: '201',                       col: 13, colSpan: 2, row: 1, type: 'room' },
-      // Нижний ряд
-      { id: '214', label: '214', sublabel: 'кафедра ИСТ',          col: 1,  colSpan: 2, row: 2, type: 'room' },
-      { id: '212', label: '212', sublabel: 'кафедра защиты',        col: 3,  colSpan: 2, row: 2, type: 'room' },
-      { id: '210', label: '210', sublabel: 'процессор',             col: 5,  colSpan: 1, row: 2, type: 'room' },
-      { id: '208', label: '208',                                     col: 6,  colSpan: 2, row: 2, type: 'room' },
-      { id: '206', label: '206',                                     col: 8,  colSpan: 2, row: 2, type: 'room' },
-      { id: '204', label: '204',                                     col: 10, colSpan: 2, row: 2, type: 'room' },
-      { id: '202', label: '202',                                     col: 12, colSpan: 3, row: 2, type: 'room' },
+      { id: '215', x: 7,  y: 24, w: 19, h: 30 },
+      { id: '209', x: 36, y: 28, w: 12, h: 22 },
+      { id: '207', x: 48, y: 28, w: 11, h: 22 },
+      { id: '203', x: 69, y: 28, w: 10, h: 22 },
+      { id: '201', x: 79, y: 28, w: 13, h: 22 },
+      { id: '216', x: 7,  y: 54, w: 19, h: 11 },
+      { id: '214', x: 7,  y: 65, w: 19, h: 30 },
+      { id: '212', x: 26, y: 65, w: 11, h: 30 },
+      { id: '210', x: 37, y: 54, w: 5,  h: 41 },
+      { id: '208', x: 42, y: 65, w: 13, h: 30 },
+      { id: '206', x: 55, y: 65, w: 13, h: 30 },
+      { id: '204', x: 68, y: 65, w: 11, h: 30 },
+      { id: '202', x: 79, y: 65, w: 13, h: 30 },
     ],
   },
   {
     floor: 3,
-    cols: 13,
-    rows: 2,
+    src: '/floors/floor-3.png',
+    aspectRatio: '1080 / 382',
     rooms: [
-      // Верхний ряд
-      { id: '313', label: '313', col: 1,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'wc-3-l', label: 'WC', col: 3, colSpan: 1, row: 1, type: 'wc' },
-      { id: 'st-3-l', label: '↕',  col: 4, colSpan: 1, row: 1, type: 'stairs' },
-      { id: '309', label: '309', col: 5,  colSpan: 2, row: 1, type: 'room' },
-      { id: '307', label: '307', col: 7,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'st-3-r', label: '↕',  col: 9,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: 'wc-3-r', label: 'WC', col: 10, colSpan: 1, row: 1, type: 'wc' },
-      { id: '303', label: '303', col: 11, colSpan: 1, row: 1, type: 'room' },
-      { id: '301', label: '301', col: 12, colSpan: 2, row: 1, type: 'room' },
-      // Нижний ряд
-      { id: '312', label: '312', col: 1,  colSpan: 2, row: 2, type: 'room' },
-      { id: '310', label: '310', col: 3,  colSpan: 2, row: 2, type: 'room' },
-      { id: '308', label: '308', col: 5,  colSpan: 2, row: 2, type: 'room' },
-      { id: '306', label: '306', col: 7,  colSpan: 2, row: 2, type: 'room' },
-      { id: '304', label: '304', col: 9,  colSpan: 2, row: 2, type: 'room' },
-      { id: '302', label: '302', col: 11, colSpan: 2, row: 2, type: 'room' },
-      { id: '300', label: '300', sublabel: 'совещательная 32 бит', col: 13, colSpan: 1, row: 2, type: 'service' },
+      { id: '313', x: 9,  y: 28, w: 15, h: 26 },
+      { id: '309', x: 36, y: 28, w: 12, h: 26 },
+      { id: '307', x: 48, y: 28, w: 11, h: 26 },
+      { id: '303', x: 70, y: 28, w: 9,  h: 26 },
+      { id: '301', x: 79, y: 28, w: 13, h: 26 },
+      { id: '312', x: 9,  y: 58, w: 15, h: 32 },
+      { id: '310', x: 24, y: 58, w: 13, h: 32 },
+      { id: '308', x: 37, y: 58, w: 11, h: 32 },
+      { id: '306', x: 48, y: 58, w: 13, h: 32 },
+      { id: '304', x: 61, y: 58, w: 11, h: 32 },
+      { id: '302', x: 72, y: 58, w: 11, h: 32 },
+      { id: '300', x: 83, y: 54, w: 9,  h: 38 },
     ],
   },
   {
     floor: 4,
-    cols: 13,
-    rows: 2,
+    src: '/floors/floor-4.png',
+    aspectRatio: '1080 / 392',
     rooms: [
-      // Верхний ряд
-      { id: '409', label: '409', col: 1,  colSpan: 2, row: 1, type: 'room' },
-      { id: 'wc-4-l', label: 'WC', col: 3, colSpan: 1, row: 1, type: 'wc' },
-      { id: 'st-4-l', label: '↕',  col: 4, colSpan: 1, row: 1, type: 'stairs' },
-      { id: '407A', label: '407А', sublabel: 'бэкэнд', col: 5, colSpan: 1, row: 1, type: 'service' },
-      { id: '407',  label: '407',  col: 6,  colSpan: 3, row: 1, type: 'room' },
-      { id: 'st-4-r', label: '↕',  col: 9,  colSpan: 1, row: 1, type: 'stairs' },
-      { id: 'wc-4-r', label: 'WC', col: 10, colSpan: 1, row: 1, type: 'wc' },
-      { id: '403', label: '403', col: 11, colSpan: 1, row: 1, type: 'room' },
-      { id: '401', label: '401', col: 12, colSpan: 2, row: 1, type: 'room' },
-      // Нижний ряд
-      { id: '408', label: '408', col: 1,  colSpan: 2, row: 2, type: 'room' },
-      { id: '406', label: '406', col: 3,  colSpan: 2, row: 2, type: 'room' },
-      { id: '404', label: '404', sublabel: 'мегабайт холл', col: 5,  colSpan: 4, row: 2, type: 'service' },
-      { id: 'cowork', label: 'ковёркинг',                    col: 9,  colSpan: 5, row: 2, type: 'service' },
+      { id: '409',  x: 9,  y: 25, w: 15, h: 26 },
+      { id: '407A', x: 37, y: 25, w: 5,  h: 30 },
+      { id: '407',  x: 42, y: 25, w: 16, h: 30 },
+      { id: '403',  x: 68, y: 25, w: 11, h: 26 },
+      { id: '401',  x: 79, y: 25, w: 13, h: 26 },
+      { id: '408',  x: 9,  y: 55, w: 13, h: 32 },
+      { id: '406',  x: 22, y: 55, w: 13, h: 32 },
+      { id: '404',  x: 35, y: 55, w: 22, h: 36 },
+      { id: 'cowork', x: 57, y: 55, w: 35, h: 36 },
     ],
   },
 ]
 
-/** Определяет этаж по номеру аудитории. */
+/** Этаж по номеру аудитории. */
 export function getFloorByRoom(room: string): number | null {
   const cleaned = room.trim()
-  // "214" → 2 этаж по первой цифре
   const match = cleaned.match(/^(\d)(\d{2})/)
   if (match) {
     const floor = Number(match[1])
@@ -136,7 +96,7 @@ export function getFloorByRoom(room: string): number | null {
   return null
 }
 
-/** Нормализует "ауд. 214" / "214" / "214₂" к голому "214" для подсветки. */
+/** "ауд. 214" / "214₂" → "214" */
 export function normalizeRoomId(room: string): string {
   return room.replace(/ауд\.?\s*/i, '').replace(/[₀-₉]/g, '').trim()
 }

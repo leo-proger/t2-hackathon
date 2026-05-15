@@ -1,10 +1,8 @@
-import { ArrowUpDown, User } from 'lucide-react'
-import { FLOOR_PLANS, type FloorRoom } from '@/data/floorPlans'
-import { cn } from '@/lib/utils'
+import { FLOOR_PLANS } from '@/data/floorPlans'
 
 interface Props {
   floor: number
-  /** Аудитория, которую надо подсветить */
+  /** id аудитории, которую нужно подсветить (например "214") */
   highlightRoom?: string
 }
 
@@ -18,67 +16,47 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
     )
   }
 
-  return (
-    <div className="bg-sky-50 rounded-xl p-4 md:p-6">
-      <h3 className="text-2xl font-bold text-sky-700 text-center mb-4">{plan.floor} этаж</h3>
-
-      <div
-        className="grid gap-1.5"
-        style={{
-          gridTemplateColumns: `repeat(${plan.cols}, minmax(0, 1fr))`,
-          gridTemplateRows: `repeat(${plan.rows}, minmax(56px, auto))`,
-        }}
-      >
-        {plan.rooms.map((room) => (
-          <RoomBox key={room.id} room={room} highlighted={room.id === highlightRoom} />
-        ))}
-      </div>
-    </div>
-  )
-}
-
-function RoomBox({ room, highlighted }: { room: FloorRoom; highlighted: boolean }) {
-  const style: React.CSSProperties = {
-    gridColumn: `${room.col} / span ${room.colSpan}`,
-    gridRow: `${room.row} / span ${room.rowSpan ?? 1}`,
-  }
-
-  // Иконки для туалетов и лестниц — без рамки
-  if (room.type === 'wc') {
-    return (
-      <div style={style} className="flex items-center justify-center">
-        <User size={18} className="text-sky-600" />
-      </div>
-    )
-  }
-  if (room.type === 'stairs') {
-    return (
-      <div style={style} className="flex items-center justify-center">
-        <ArrowUpDown size={18} className="text-sky-600/70" />
-      </div>
-    )
-  }
-
-  // Цвета и стили в зависимости от типа и подсветки
-  const baseClasses = 'relative flex flex-col items-center justify-center text-center px-1.5 py-1 rounded-md border-2 transition-all'
-
-  let stateClasses: string
-  if (highlighted) {
-    stateClasses = 'border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-primary/30 z-10 scale-105 animate-[pulse_2s_ease-in-out_infinite]'
-  } else if (room.type === 'service') {
-    stateClasses = 'border-sky-300 bg-white/60 text-sky-800'
-  } else {
-    stateClasses = 'border-sky-700 bg-white text-sky-700'
-  }
+  const target = highlightRoom ? plan.rooms.find((r) => r.id === highlightRoom) : null
+  // Если комната у верхнего края — маркер показываем снизу, чтобы он не вылез за фотку
+  const markerOnTop = target ? target.y >= 18 : true
 
   return (
-    <div style={style} className={cn(baseClasses, stateClasses)}>
-      <span className={cn('font-bold leading-none', room.type === 'service' ? 'text-sm' : 'text-base md:text-lg')}>
-        {room.label}
-      </span>
-      {room.sublabel && (
-        <span className={cn('text-[9px] md:text-[10px] leading-tight mt-0.5 line-clamp-2', highlighted ? 'text-primary-foreground/90' : 'text-sky-700/70')}>
-          {room.sublabel}
+    <div className="relative w-full" style={{ aspectRatio: plan.aspectRatio }}>
+      {/* Сама фотка + подсветка живут в overflow-hidden, чтобы dim-ring не вылезал */}
+      <div className="absolute inset-0 rounded-xl overflow-hidden bg-sky-100">
+        <img
+          src={plan.src}
+          alt={`Схема ${plan.floor} этажа`}
+          className="absolute inset-0 w-full h-full object-contain select-none"
+          draggable={false}
+        />
+        {target && (
+          <div
+            className="absolute pointer-events-none rounded-md ring-4 ring-primary shadow-[0_0_0_9999px_rgba(0,0,0,0.25)] animate-[pulse_2s_ease-in-out_infinite]"
+            style={{
+              left: `${target.x}%`,
+              top: `${target.y}%`,
+              width: `${target.w}%`,
+              height: `${target.h}%`,
+              background: 'oklch(0.56 0.215 262 / 0.18)',
+            }}
+          />
+        )}
+      </div>
+
+      {/* Маркер «вот сюда» вне overflow-hidden, чтобы не обрезался */}
+      {target && (
+        <span
+          className="absolute z-20 whitespace-nowrap bg-primary text-primary-foreground text-[11px] font-semibold px-2 py-0.5 rounded-full shadow-md pointer-events-none"
+          style={{
+            left: `${target.x + target.w / 2}%`,
+            top: markerOnTop
+              ? `calc(${target.y}% - 26px)`
+              : `calc(${target.y + target.h}% + 6px)`,
+            transform: 'translateX(-50%)',
+          }}
+        >
+          {markerOnTop ? '▼' : '▲'} вот сюда
         </span>
       )}
     </div>

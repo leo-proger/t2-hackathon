@@ -22,22 +22,28 @@ class UserModel(Base):
     __tablename__ = 'users'
 
     id: Mapped[intpk]
+    group: Mapped[str]
     groupID: Mapped[int]
+
+    name: Mapped[str]
+    surname: Mapped[str]
+    faculty: Mapped[str]
+    year: Mapped[int]
+    simestr: Mapped[int]
+    xp: Mapped[int]
+    level: Mapped[int]
+    adaptationProgress: Mapped[int]
+
     subgroup: Mapped[int] = 0
     language: Mapped[str | None]
-
     status: Mapped[StatusEnum]
-
-    fullName: Mapped[str]
-    surname: Mapped[str | None]
-    name: Mapped[str | None]
-    middle_name: Mapped[str | None]
     passwordHash: Mapped[str]
 
     email: Mapped[str]
     date_of_birth: Mapped[datetime.date | None]
 
-    group: Mapped[str | None]
+    # fullName: Mapped[str]
+    # middle_name: Mapped[str | None]
 
     # events: Mapped[list["EventModel"]] = relationship(
     #     back_populates="registration_user",

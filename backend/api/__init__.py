@@ -29,12 +29,24 @@ async def add_base():
     #     yearName="0-0",
     # ))
     session.add(UserModel(
+        group="",
         groupID=0,
+
+        name="Altron1423",
+        surname="",
+        faculty="ИВИТШ",
+        year=0,
+        simestr=0,
+        xp=0,
+        level=-1,
+        adaptationProgress=75,
+
         subgroup=0,
-        fullName="Altron1423",
-        passwordHash="ad6d8e78172e5e321394fecc53951fd435e25fc7",
+        language=None,
         status=StatusEnum.zero,
-        email='altron1423@gmail.com'
+        passwordHash="ecb252044b5ea0f679ee78ec1a12904739e2904d",
+        email='altron1423@gmail.com',
+        date_of_birth=None
     ))
     await session.commit()
 

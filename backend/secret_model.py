@@ -111,3 +111,6 @@ async def valid_user_statuses(data, statuses, session):
         return
 
     raise HTTPException(status_code=403, detail=f"Insufficient authority")
+
+if __name__ == '__main__':
+    print(hashing("string"))

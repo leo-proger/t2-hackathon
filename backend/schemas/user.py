@@ -18,6 +18,17 @@ class UserNewDataSchema(BaseModel):
 
     date_of_birth: datetime.date# | None
 
+class UserMeSchema(BaseModel):
+    id: int
+    name: str
+    faculty:str
+    group: str
+    year: int
+    simestr: int
+    xp: int
+    level: int
+    adaptationProgress: int
+
 
 class UserLoginSchema(BaseModel):
     email: EmailStr

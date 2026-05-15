@@ -38,15 +38,13 @@ npm run dev
 {
   "id": "u1",
   "name": "Артём",
-  "initials": "АИ",
   "faculty": "ИВИТШ",
+  "group": "00-XXбо-0",
   "year": 1,
-  "week": 3,
+  "simestr": 1,
   "xp": 340,
   "level": 3,
-  "adaptationProgress": 62,
-  "streakDays": 7,
-  "streakHistory": [true, true, true, true, true, true, true]
+  "adaptationProgress": 62
 }
 ```
 
@@ -157,8 +155,8 @@ npm run dev
 
 | Эндпоинт                         | Версия | Описание                                      |
 |----------------------------------|--------|-----------------------------------------------|
-| `GET /api/teachers/:id`          | v1     | Карточка преподавателя                         |
-| `GET /api/buildings`             | v1     | Корпуса университета (страница «Корпус»)       |
-| `POST /api/quests/:id/complete`  | v1     | Завершение квеста (выдача XP)                  |
-| `GET /api/tutors`                | v1     | Список тьюторов для связи                      |
-| `POST /api/feedback`             | v1     | 👍/👎 на ответ бота                            |
+| `GET /api/teachers/:id`          | v1     | Карточка преподавателя                        |
+| `GET /api/buildings`             | v1     | Корпуса университета (страница «Корпус»)      |
+| `POST /api/quests/:id/complete`  | v1     | Завершение квеста (выдача XP)                 |
+| `GET /api/tutors`                | v1     | Список тьюторов для связи                     |
+| `POST /api/feedback`             | v1     | 👍/👎 на ответ бота                           |

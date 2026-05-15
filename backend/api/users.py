@@ -4,11 +4,12 @@ from sqlalchemy import select, update
 from sqlalchemy.orm import joinedload, selectinload
 
 from backend.api.dependencies import SessionDep
+from backend.mappers.user_mapper import UserMeMapper
 from backend.models.user import UserModel, StatusEnum
 from backend.schemas.user import UserCreateSchema, UserLoginSchema, UserResetPassword, UserNewDataSchema
 from backend.secret_model import hashing, generate_password, test_passw, security, config, user_request_validity
 
-router = APIRouter(prefix='/user', tags=['users'])
+router = APIRouter(prefix='/users', tags=['users'])
 
 
 @router.post('/login')
@@ -120,7 +121,7 @@ async def reset_password(credentials: UserResetPassword, request: Request, sessi
 
 
 @router.post('/new_data')
-async def reset_password(data: UserNewDataSchema, request: Request, session: SessionDep):
+async def new_data(data: UserNewDataSchema, request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
 
@@ -148,3 +149,26 @@ async def reset_password(data: UserNewDataSchema, request: Request, session: Ses
     await session.commit()
     return {"ok": True}
 
+
+@router.get('/me')
+async def me(request: Request, session: SessionDep):
+    """
+    Возвращает статус "ok" и профиль текущего пользователя.
+    :param request:
+    :param session:
+    :return:
+    """
+    user = await user_request_validity(request, StatusEnum.all, session)
+
+    query = (
+        select(UserModel)
+        .filter(UserModel.name == user.name)
+    )
+
+    result = await session.execute(query)
+    result = result.unique().scalars().all()[0]
+
+    print(type(result))
+    print(result)
+
+    return UserMeMapper.to_schem(result)

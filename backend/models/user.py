@@ -1,11 +1,9 @@
 import datetime
 import enum
 
-# from sqlalchemy import ForeignKey
-from sqlalchemy.orm import Mapped#, relationship
+from sqlalchemy.orm import Mapped
 
-from backend.database import Base, intpk#, group_id
-# from backend.models.event import EventModel
+from backend.database import Base, intpk
 
 
 class StatusEnum(enum.Enum):
@@ -28,19 +26,21 @@ class UserModel(Base):
     name: Mapped[str]
     surname: Mapped[str]
     faculty: Mapped[str]
-    year: Mapped[int]
-    simestr: Mapped[int]
-    xp: Mapped[int]
-    level: Mapped[int]
-    adaptationProgress: Mapped[int]
+    year: Mapped[int] = 1
+    simestr: Mapped[int] = 0
+    xp: Mapped[int] = 0
+    level: Mapped[int] = 0
+    adaptationProgress: Mapped[int] = 0
 
     subgroup: Mapped[int] = 0
-    language: Mapped[str | None]
+    language: Mapped[str | None] = None
     status: Mapped[StatusEnum]
     passwordHash: Mapped[str]
 
     email: Mapped[str]
     date_of_birth: Mapped[datetime.date | None]
+
+    quests: Mapped[int] = 0
 
     # fullName: Mapped[str]
     # middle_name: Mapped[str | None]

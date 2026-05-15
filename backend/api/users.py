@@ -12,6 +12,9 @@ from backend.secret_model import hashing, generate_password, test_passw, securit
 router = APIRouter(prefix='/users', tags=['users'])
 
 
+
+
+
 @router.post('/login')
 async def login(credentials: UserLoginSchema, request: Request, session: SessionDep, response: Response):
     await user_request_validity(request)

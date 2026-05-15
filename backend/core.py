@@ -5,6 +5,7 @@ class Core:
     model_url: str
     model_name: str
     api_key: str
+    count_quests: int
 
     def __init__(self):
         with pathlib.Path("core.cr").open("r") as f:

@@ -70,8 +70,6 @@ class QuestionParser:
         print(result)
         print(answers)
 
-
-
     def get_question(self) -> dict[str, str]:
         return self.questions
 

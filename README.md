@@ -30,6 +30,38 @@ npm run dev
 
 Все ответы — JSON. Все эндпоинты под префиксом, который задаётся `VITE_API_BASE_URL`.
 
+### `POST /api/users/login`
+
+Аутентификация пользователя
+
+**Вход**
+```json
+{
+  "email": "user@example.com",
+  "password": "string"
+}
+```
+**Выход**
+```json
+{
+  "ok": true,
+  "access_token": "access jwt",
+  "refresh_token": "refresh jwt"
+}
+```
+
+### `GET /api/users/refresh`
+
+Обновление `Acccess JWT` для пользователя.
+
+```json
+{
+  "ok": true,
+  "access_token": "access jwt",
+  "refresh_token": "refresh jwt"
+}
+```
+
 ### `GET /api/users/me`
 
 Профиль текущего пользователя.
@@ -74,11 +106,10 @@ npm run dev
 
 ```json
 [
-  { "id": "q1", "label": "Найди 301 ауд.", "xp": 50, "progress": 60 }
+  { "id": "q1", "label": "Найдено-ненайдено", "description": "Найди 404 ауд.", "xp": 50, "done": false }
 ]
 ```
 
-`progress` — число от 0 до 100.
 
 ### `GET /api/checklist`
 

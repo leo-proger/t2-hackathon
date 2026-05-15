@@ -1,20 +1,18 @@
+import json
+import pathlib
 from pathlib import Path
 
 from fastapi import APIRouter, Request
 from fastapi.responses import FileResponse
 
-# from backend.api.chats import router as chats_router
 from backend.api.events import router as events_router
-# from backend.api.groups import router as groups_router
 from backend.api.lessons import router as lessons_router
-# from backend.api.messages import router as messages_router
 from backend.api.users import router as users_router
-from backend.database import engine, Base, new_session
-# from backend.models.group import GroupModel
-from backend.models.user import UserModel, StatusEnum
-# from backend.secret_model import user_request_validity
+from backend.api.quests import router as quests_router
 
-# import backend.binders.bind1
+from backend.database import engine, Base, new_session
+from backend.models.quest import QuestModel
+from backend.models.user import UserModel, StatusEnum
 
 main_router = APIRouter()
 
@@ -35,19 +33,22 @@ async def add_base():
         name="ThisIsName",
         surname="",
         faculty="ИВИТШ",
-        year=0,
-        simestr=0,
-        xp=0,
         level=-1,
-        adaptationProgress=75,
 
-        subgroup=0,
-        language=None,
         status=StatusEnum.zero,
         passwordHash="ecb252044b5ea0f679ee78ec1a12904739e2904d",
         email='user@example.com',
         date_of_birth=None
     ))
+
+    with pathlib.Path('quests.json').open("r", encoding='utf-8') as f:
+        data = json.load(f)
+
+    for quest in data:
+        session.add(QuestModel(
+            **quest
+        ))
+
     await session.commit()
 
 
@@ -73,6 +74,7 @@ async def setup_database(request: Request):
 main_router.include_router(lessons_router)
 main_router.include_router(users_router)
 main_router.include_router(events_router)
+main_router.include_router(quests_router)
 # main_router.include_router(chats_router)
 # main_router.include_router(messages_router)
 

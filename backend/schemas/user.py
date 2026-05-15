@@ -11,7 +11,6 @@ class UserCreateSchema(BaseModel):
 
 class UserNewDataSchema(BaseModel):
 
-    # fullName: str | None
     surname: str# | None
     name: str# | None
     middle_name: str# | None

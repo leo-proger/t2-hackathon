@@ -1,10 +1,8 @@
 import datetime
-
-# from sqlalchemy import ForeignKey
+y
 from sqlalchemy.orm import Mapped
-# , mapped_column, relationship)
 
-from backend.database import Base, intpk#, group_id
+from backend.database import Base, intpk
 
 
 # import enum

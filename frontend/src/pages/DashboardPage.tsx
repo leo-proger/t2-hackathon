@@ -1,3 +1,8 @@
+import { useUser } from '@/hooks/useUser'
+import { useSchedule } from '@/hooks/useSchedule'
+import { useQuests } from '@/hooks/useQuests'
+import { useChecklist } from '@/hooks/useChecklist'
+import { useDailyTask } from '@/hooks/useDailyTask'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { DailyTaskCard } from '@/components/dashboard/DailyTaskCard'
 import { StreakCard } from '@/components/dashboard/StreakCard'
@@ -7,48 +12,44 @@ import { ChatCard } from '@/components/dashboard/ChatCard'
 import { QuestsCard } from '@/components/dashboard/QuestsCard'
 
 export function DashboardPage() {
+  const user = useUser()
+  const schedule = useSchedule()
+  const quests = useQuests()
+  const checklist = useChecklist()
+  const dailyTask = useDailyTask()
+
   return (
     <main className="p-4 md:p-5">
       <div
         className="grid gap-3"
-        style={{
-          gridTemplateColumns: 'repeat(12, 1fr)',
-          gridAutoRows: '80px',
-        }}
+        style={{ gridTemplateColumns: 'repeat(12, 1fr)', gridAutoRows: '80px' }}
       >
-        {/* Welcome — 5 cols × 3 rows */}
         <div style={{ gridColumn: 'span 5', gridRow: 'span 3' }}>
-          <WelcomeCard />
+          <WelcomeCard user={user.data} loading={user.loading} />
         </div>
 
-        {/* Daily Task — 4 cols × 3 rows */}
         <div style={{ gridColumn: 'span 4', gridRow: 'span 3' }}>
-          <DailyTaskCard />
+          <DailyTaskCard task={dailyTask.task} loading={dailyTask.loading} onComplete={dailyTask.complete} />
         </div>
 
-        {/* Streak — 3 cols × 2 rows */}
         <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <StreakCard />
+          <StreakCard days={user.data?.streakDays} history={user.data?.streakHistory} loading={user.loading} />
         </div>
 
-        {/* Checklist — 3 cols × 2 rows */}
         <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <ChecklistCard />
+          <ChecklistCard items={checklist.items} loading={checklist.loading} onComplete={checklist.complete} />
         </div>
 
-        {/* Schedule — 4 cols × 2 rows */}
         <div style={{ gridColumn: 'span 4', gridRow: 'span 2' }}>
-          <ScheduleCard />
+          <ScheduleCard lessons={schedule.data ?? []} loading={schedule.loading} />
         </div>
 
-        {/* Chat — 5 cols × 3 rows */}
         <div style={{ gridColumn: 'span 5', gridRow: 'span 3' }}>
           <ChatCard />
         </div>
 
-        {/* Quests — 3 cols × 2 rows */}
         <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <QuestsCard />
+          <QuestsCard quests={quests.data ?? []} loading={quests.loading} />
         </div>
       </div>
     </main>

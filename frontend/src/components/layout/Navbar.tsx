@@ -1,6 +1,7 @@
 import { Sparkles, Zap } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
+import { useUser } from '@/hooks/useUser'
 
 const NAV_LINKS = [
   { label: 'Главная', href: '#', active: true },
@@ -11,9 +12,10 @@ const NAV_LINKS = [
 ]
 
 export function Navbar() {
+  const { data: user } = useUser()
+
   return (
     <nav className="flex items-center justify-between px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/80 sticky top-0 z-50">
-      {/* Logo */}
       <div className="flex items-center gap-2">
         <Sparkles className="text-primary" size={18} />
         <span className="text-[15px] font-semibold tracking-tight text-foreground">
@@ -21,18 +23,18 @@ export function Navbar() {
         </span>
       </div>
 
-      {/* Nav links */}
       <div className="flex items-center gap-1">
         {NAV_LINKS.map((link) => (
           <NavLink key={link.label} label={link.label} href={link.href} active={link.active} />
         ))}
       </div>
 
-      {/* Right side */}
       <div className="flex items-center gap-2.5">
-        <XpBadge xp={340} />
+        {user && <XpBadge xp={user.xp} />}
         <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">АИ</AvatarFallback>
+          <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">
+            {user?.initials ?? '…'}
+          </AvatarFallback>
         </Avatar>
       </div>
     </nav>

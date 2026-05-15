@@ -1,20 +1,22 @@
 import { Zap } from 'lucide-react'
+import type { Quest } from '@/types'
 
-const QUESTS = [
-  { label: 'Найди 301 ауд.', xp: 50, progress: 60 },
-  { label: 'Задай вопрос преподу', xp: 30, progress: 30 },
-  { label: '7-дневный стрик', xp: 100, progress: 70 },
-]
+interface Props {
+  quests: Quest[]
+  loading: boolean
+}
 
-export function QuestsCard() {
+export function QuestsCard({ quests, loading }: Props) {
+  if (loading) return <CardSkeleton />
+
   return (
     <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 flex flex-col h-full">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-emerald-600 mb-3">
         Активные квесты
       </p>
       <ul className="flex flex-col gap-3 flex-1">
-        {QUESTS.map((quest) => (
-          <li key={quest.label} className="flex flex-col gap-1">
+        {quests.map((quest) => (
+          <li key={quest.id} className="flex flex-col gap-1">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
@@ -34,6 +36,23 @@ export function QuestsCard() {
           </li>
         ))}
       </ul>
+    </div>
+  )
+}
+
+function CardSkeleton() {
+  return (
+    <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-5 flex flex-col h-full gap-3 animate-pulse">
+      <div className="h-2.5 w-28 rounded bg-emerald-200" />
+      {Array.from({ length: 3 }).map((_, i) => (
+        <div key={i} className="flex flex-col gap-1.5">
+          <div className="flex justify-between">
+            <div className="h-3 w-28 rounded bg-emerald-200" />
+            <div className="h-3 w-12 rounded bg-emerald-200" />
+          </div>
+          <div className="ml-4 h-1 rounded-full bg-emerald-200" />
+        </div>
+      ))}
     </div>
   )
 }

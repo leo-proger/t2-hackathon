@@ -58,14 +58,16 @@ async def history(message: MessageSchema, request: Request, session: SessionDep)
     else:
         history = user.chat_history + ", "
 
-    bot_say = mess_to_format(data, 'bot', user.count_messages+1)
     history += f"{mess_to_format(message.text, 'user', user.count_messages)}"
     if data != None:
-        history += f", {bot_say}"
-        user.count_messages += 1
+        bot_say = mess_to_format(data, 'bot', user.count_messages+1)
+    else:
+        bot_say = mess_to_format("Я не смог найти информацию. Но я могу отправить твой вопрос в университет, что бы там на него ответили, а я тебе его передам.", 'bot', user.count_messages+1)
+    history += f", {bot_say}"
+    # user.count_messages += 1
 
     user.chat_history = history.replace("'", "\"").replace("None", "null")
-    user.count_messages += 1
+    user.count_messages += 2
 
     await session.commit()
     return bot_say

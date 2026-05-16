@@ -27,12 +27,12 @@ def mess_to_format(message, role, id_message) -> dict:
 async def get_history(request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
-    # try:
-    print(user.chat_history)
-    return json.loads(f"[{user.chat_history}]")
-    # except Exception as e:
-    #     print(e)
-    #     return f"[{user.chat_history}]"
+    try:
+        print(user.chat_history)
+        return json.loads(f"[{user.chat_history}]")
+    except Exception as e:
+        print(e)
+        return f"[{user.chat_history}]"
 
 
 @router.post('/message')
@@ -46,13 +46,9 @@ async def send_message(message: MessageSchema, request: Request, session: Sessio
     else:
         history = user.chat_history + ", "
 
-    history += f"{mess_to_format(message.text, 'user', user.count_messages)}"
-    if data != None:
-        bot_say = mess_to_format(data, 'bot', user.count_messages+1)
-    else:
-        bot_say = mess_to_format("Я не смог найти информацию. Но я могу отправить твой вопрос в университет, что бы там на него ответили, а я тебе его передам.", 'bot', user.count_messages+1)
-    history += f", {bot_say}"
-    # user.count_messages += 1
+    history += json.dumps(mess_to_format(message.text, 'user', user.count_messages))
+    bot_say = mess_to_format(data, 'bot', user.count_messages+1)
+    history += ", " + json.dumps(bot_say)
 
     user.chat_history = history.replace("'", "\"").replace("None", "null")
     user.count_messages += 2

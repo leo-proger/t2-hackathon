@@ -28,3 +28,4 @@ frontend/*.sln
 frontend/*.sw?
 
 # -------- backend/ --------
+backend/lessons.db

@@ -1,6 +1,6 @@
 {
-    "model_url": "http://127.0.0.1:1234/v1",
-    "model_name": "qwen/qwen3.5-9b",
-    "api_key": "",
+    "model_url": "https://generativelanguage.googleapis.com/v1beta/openai",
+    "model_name": "gemini-3-flash-preview",
+    "api_key": "AIzaSyDdaLyB4yMNuTfKnY0UkpQNBG0hS35qang",
     "count_quests": 20
 }

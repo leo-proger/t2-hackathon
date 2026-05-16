@@ -47,9 +47,7 @@ class AIAModel(AIModel):
             model=self.model_name,
             tools=tools,
             messages=history,
-            extra_body={
-                "chat_template_kwargs": {"enable_thinking": False}
-            },
+
             stream=False,
         )
 

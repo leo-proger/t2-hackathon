@@ -49,6 +49,30 @@ class QuestionParser:
 
         return raw_answer.choices[0].message.content
 
+    async def get_analog_question(self, query: str):
+        raw_answer = await self.ai_model.send_question([
+            {
+                "role": "system",
+                "content": self.prompt1
+            },
+            {
+                "role": "user",
+                "content": f"""Новый запрос: {query}
+Существующие вопросы: {list(enumerate(self.questions))}"""
+            }
+        ])
+
+        result: dict[str, str | int | None | list[int]]
+
+        try:
+            raw_json = raw_answer.choices[0].message.content
+            result = json.loads(raw_json)
+        except json.JSONDecodeError:
+            result = {"type": "none", "main": None, "near": []}
+
+        return result
+
+
     async def new_question_big(self, query: str):
         raw_answer = await self.ai_model.send_question([
             {

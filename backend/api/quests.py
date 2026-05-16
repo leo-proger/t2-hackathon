@@ -37,7 +37,31 @@ async def active(request: Request, session: SessionDep):
 
     result = await session.execute(query)
     quests = []
-    for lesson in result.scalars().all():
-        quests.append(QuestMapper.to_schem(lesson, progressing[-lesson.id - 1]))
+    for quest in result.scalars().all():
+        quests.append(QuestMapper.to_schem(quest, progressing[-quest.id]))
 
     return quests
+
+@router.get('/complit/{id_quest}')
+async def complit(id_quest:int , request: Request, session: SessionDep):
+    user = await user_request_validity(request, StatusEnum.all, session)
+
+    quests = bin(user.quests)[2:]
+    percent_by_quests = 100 / CORE.count_quests
+    quests_stadi = int(user.adaptationProgress / (percent_by_quests * 5))
+    quests = "0" * (CORE.count_quests - len(quests)) + quests
+
+    query = (
+        select(QuestModel)
+        .filter(QuestModel.id == id_quest)
+    )
+
+    result = await session.execute(query)
+    quest = result.scalars().one()
+    if quests[-id_quest] == "0" and quest.stadi == quests_stadi:
+        user.quests += 2 ** (id_quest - 1)
+        user.adaptationProgress += percent_by_quests
+        user.xp += quest.xp
+        await session.commit()
+        return True
+    return False

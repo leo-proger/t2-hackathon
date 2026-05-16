@@ -59,10 +59,13 @@ async def history(message: MessageSchema, request: Request, session: SessionDep)
         history = user.chat_history + ", "
 
     bot_say = mess_to_format(data, 'bot', user.count_messages+1)
-    history += f"{mess_to_format(message.text, 'user', user.count_messages)}, {bot_say}"
+    history += f"{mess_to_format(message.text, 'user', user.count_messages)}"
+    if data != None:
+        history += f", {bot_say}"
+        user.count_messages += 1
 
-    user.chat_history = history.replace("'", "\"")
-    user.count_messages = user.count_messages + 2
+    user.chat_history = history.replace("'", "\"").replace("None", "null")
+    user.count_messages += 1
 
     await session.commit()
     return bot_say

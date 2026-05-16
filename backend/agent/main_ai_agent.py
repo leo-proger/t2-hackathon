@@ -26,7 +26,7 @@ class MainAgent:
                 print("call search_small_kb")
                 try:
                     d = json.loads(tool_call.function.arguments)
-                    return  await QP.new_question_litle(**d)
+                    return await QP.new_question_litle(**d)
                 except TypeError as er:
                     print("Error", er)
 
@@ -34,13 +34,18 @@ class MainAgent:
                 print("call search_large_qlist")
                 try:
                     d = json.loads(tool_call.function.arguments)
-                    return  await QP.new_question_big(**d)
+                    return await QP.new_question_big(**d)
                 except TypeError as er:
                     print("Error", er)
             else:
                 print("error call")
 
     async def ask_question(self, question):
+        # try:
+        #     d = json.loads(question)
+        #     return await QP.new_question_big(**d)
+        # except TypeError as er:
+        #     print("Error", er)
         prompt = [
             {
                 "role": "system",

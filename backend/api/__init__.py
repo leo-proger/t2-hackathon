@@ -35,6 +35,48 @@ async def add_base():
         email='user@example.com',
         date_of_birth=None
     ))
+    session.add(UserModel(
+        group="",
+        groupID=1,
+
+        name="Вася",
+        surname="Капотин",
+        faculty="ИВИТШ",
+        level=0,
+
+        status=StatusEnum.student,
+        passwordHash="40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+        email='t1@u.ru',
+        date_of_birth=None
+    ))
+    session.add(UserModel(
+        group="",
+        groupID=0,
+
+        name="Ася",
+        surname="Рыжёва",
+        faculty="ИВИТШ",
+        level=0,
+
+        status=StatusEnum.student,
+        passwordHash="40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+        email='t2@u.ru',
+        date_of_birth=None
+    ))
+    session.add(UserModel(
+        group="",
+        groupID=0,
+
+        name="Иван",
+        surname="Петрович",
+        faculty="ИВИТШ",
+        level=0,
+
+        status=StatusEnum.teacher,
+        passwordHash="40bd001563085fc35165329ea1ff5c5ecbdbbeef",
+        email='t3@u.ru',
+        date_of_birth=None
+    ))
 
     with pathlib.Path('data_files/quests.json').open("r", encoding='utf-8') as f:
         data = json.load(f)

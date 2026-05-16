@@ -1,6 +1,7 @@
 import hashlib
 import os
 import time
+from datetime import timedelta
 
 from authx import AuthX, AuthXConfig, exceptions
 from fastapi import HTTPException, Request
@@ -13,6 +14,7 @@ from backend.models.user import UserModel, StatusEnum
 
 config = AuthXConfig()
 
+config.JWT_ACCESS_TOKEN_EXPIRES = timedelta(days=10)
 config.JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY', "SECRET_KEY")
 config.JWT_ACCESS_COOKIE_NAME = "access_token_KGU"
 config.JWT_REFRESH_COOKIE_NAME = "refresh_token_KGU"
@@ -45,7 +47,7 @@ def generate_password(id: int):
 
 
 async def user_request_validity(request, statuses: StatusEnum | list[StatusEnum] = None, session=None):
-    valid_time_count_request(request)
+    # valid_time_count_request(request)
 
     if statuses is not None:
         data = await valid_token(request)

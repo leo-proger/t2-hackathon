@@ -1,55 +1,42 @@
+import { Link } from 'react-router-dom'
+import { ArrowRight, Map } from 'lucide-react'
 import { useUser } from '@/hooks/useUser'
 import { useQuests } from '@/hooks/useQuests'
-import { useChecklist } from '@/hooks/useChecklist'
-import { useDailyTask } from '@/hooks/useDailyTask'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
-import { DailyTaskCard } from '@/components/dashboard/DailyTaskCard'
-import { StreakCard } from '@/components/dashboard/StreakCard'
-import { ChecklistCard } from '@/components/dashboard/ChecklistCard'
 import { ScheduleCard } from '@/components/dashboard/ScheduleCard'
-import { ChatCard } from '@/components/dashboard/ChatCard'
 import { QuestsCard } from '@/components/dashboard/QuestsCard'
 
 export function DashboardPage() {
   const user = useUser()
   const quests = useQuests()
-  const checklist = useChecklist()
-  const dailyTask = useDailyTask()
 
   return (
-    <main className="p-4 md:p-5">
-      <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: 'repeat(12, 1fr)', gridAutoRows: '80px' }}
+    <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-3">
+      <WelcomeCard user={user.data} loading={user.loading} />
+
+      <Link
+        to="/guide"
+        className="flex items-center justify-between rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 hover:bg-amber-100/70 transition-colors group"
       >
-        <div style={{ gridColumn: 'span 5', gridRow: 'span 3' }}>
-          <WelcomeCard user={user.data} loading={user.loading} />
+        <div className="flex items-center gap-3">
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-amber-100">
+            <Map size={18} className="text-amber-600" />
+          </span>
+          <div>
+            <p className="text-[13px] font-semibold text-amber-800 leading-tight">
+              Твой план по адаптации
+            </p>
+            <p className="text-[11px] text-amber-600 mt-0.5">
+              Пошаговая инструкция — что делать прямо сейчас
+            </p>
+          </div>
         </div>
+        <ArrowRight size={18} className="text-amber-500 shrink-0 group-hover:translate-x-0.5 transition-transform" />
+      </Link>
 
-        <div style={{ gridColumn: 'span 4', gridRow: 'span 3' }}>
-          <DailyTaskCard task={dailyTask.task} loading={dailyTask.loading} onComplete={dailyTask.complete} />
-        </div>
+      <ScheduleCard />
 
-        <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <StreakCard days={user.data?.streakDays} history={user.data?.streakHistory} loading={user.loading} />
-        </div>
-
-        <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <ChecklistCard items={checklist.items} loading={checklist.loading} onComplete={checklist.complete} />
-        </div>
-
-        <div style={{ gridColumn: 'span 4', gridRow: 'span 2' }}>
-          <ScheduleCard />
-        </div>
-
-        <div style={{ gridColumn: 'span 5', gridRow: 'span 3' }}>
-          <ChatCard />
-        </div>
-
-        <div style={{ gridColumn: 'span 3', gridRow: 'span 2' }}>
-          <QuestsCard quests={quests.data ?? []} loading={quests.loading} />
-        </div>
-      </div>
+      <QuestsCard quests={quests.data ?? []} loading={quests.loading} />
     </main>
   )
 }

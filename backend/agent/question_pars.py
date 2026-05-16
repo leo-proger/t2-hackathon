@@ -111,7 +111,7 @@ class QuestionParser:
             raw_answer = await self.ai_model.send_question([
                 {
                     "role": "system",
-                    "content": self.prompt1
+                    "content": self.prompt2
                 },
                 {
                     "role": "user",

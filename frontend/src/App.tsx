@@ -3,6 +3,7 @@ import { Navbar } from '@/components/layout/Navbar'
 import { DashboardPage } from '@/pages/DashboardPage'
 import { SchedulePage } from '@/pages/SchedulePage'
 import { GuidePage } from '@/pages/GuidePage'
+import { ChatPage } from '@/pages/ChatPage'
 
 export default function App() {
   return (
@@ -13,6 +14,7 @@ export default function App() {
           <Route path="/" element={<DashboardPage />} />
           <Route path="/schedule" element={<SchedulePage />} />
           <Route path="/guide" element={<GuidePage />} />
+          <Route path="/chat" element={<ChatPage />} />
         </Routes>
       </div>
     </BrowserRouter>

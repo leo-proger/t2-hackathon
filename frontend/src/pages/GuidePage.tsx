@@ -1,37 +1,27 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronDown, Rocket, Footprints, Compass } from 'lucide-react'
+import { ChevronDown, Rocket, Footprints, Compass, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 // ╔═══════════════════════════════════════════════════════════════════════╗
-// ║  ИНСТРУКЦИЯ ПЕРВОКУРСНИКА                                             ║
+// ║  ИНСТРУКЦИЯ ПЕРВОКУРСНИКА — редактируй массив SECTIONS ниже.          ║
 // ╠═══════════════════════════════════════════════════════════════════════╣
-// ║                                                                       ║
-// ║  Содержание секций редактируется НИЖЕ, в массиве SECTIONS.            ║
-// ║  Каждая секция = объект с полями:                                     ║
-// ║    • id     — уникальный ключ (трогать не обязательно)                 ║
-// ║    • title  — заголовок секции                                         ║
-// ║    • icon   — иконка из lucide-react                                   ║
-// ║    • color  — цветовая схема: 'blue' | 'emerald' | 'amber'             ║
-// ║    • content — JSX с твоим текстом (см. примеры внутри секций ниже)   ║
-// ║                                                                       ║
-// ║  В content можно использовать:                                        ║
+// ║  Каждая секция = { id, title, icon, color, content }                  ║
+// ║  В content можно использовать:                                         ║
 // ║    <p>обычный абзац</p>                                                ║
 // ║    <ul><li>...</li></ul>           — буллеты                           ║
 // ║    <ol><li>...</li></ol>           — нумерованный список              ║
+// ║    <h3>Подзаголовок</h3>           — внутренний заголовок              ║
 // ║    <strong>жирный</strong>                                             ║
-// ║                                                                       ║
+// ║    <a href="...">ссылка</a>        — внешняя                          ║
+// ║    <Link to="/...">ссылка</Link>   — внутренняя (react-router)        ║
 // ╚═══════════════════════════════════════════════════════════════════════╝
 
 type ColorKey = 'blue' | 'emerald' | 'amber'
 
 const COLOR_STYLES: Record<ColorKey, {
-  border: string
-  bg: string
-  bgHover: string
-  text: string
-  iconBg: string
-  ring: string
+  border: string; bg: string; bgHover: string; text: string; iconBg: string; ring: string
 }> = {
   blue: {
     border: 'border-primary/30',
@@ -67,59 +57,143 @@ interface Section {
   content: React.ReactNode
 }
 
-// ─── СЕКЦИИ — РЕДАКТИРУЙ ЗДЕСЬ ────────────────────────────────────────────
+// ─── СЕКЦИИ ──────────────────────────────────────────────────────────────
 const SECTIONS: Section[] = [
+  // ★ СЕКЦИЯ 1
   {
-    id: 'after-admission',
-    title: 'Что сделать сразу после поступления',
+    id: 'first-2-weeks',
+    title: 'Первые 2 недели',
     icon: Rocket,
     color: 'blue',
-    // ★ ВПИШИ СЮДА свой текст. Можно <ol>, <ul>, <p>, <strong> и т.д.
     content: (
-      <ol>
-        <li>Получить студенческий билет в дирекции ИВИТШ.</li>
-        <li>Оформить пропуск в корпус.</li>
-        <li>Привязать банковскую карту для зачисления стипендии.</li>
-        <li>Иногородним — заселиться в общежитие (28–30 августа).</li>
-        <li><em>(заглушка — впиши свои пункты)</em></li>
-      </ol>
+      <>
+        <p>
+          <strong>Получи студенческий билет.</strong> Обычно его выдают на сборах
+          первокурсников. Если это не так, то иди в дирекцию (ауд. Б-209), возьми
+          паспорт и 2 фото 3×4. Студбилет — это твой паспорт внутри университета.
+        </p>
+        <p>
+          <strong>Оформи пропуск.</strong> Там же в дирекции или на охране — уточни
+          у куратора. Без пропуска не войдёшь в корпус (но если его забыл, то могут
+          пропустить по студбилету).
+        </p>
+        <p>
+          <strong>Познакомься с куратором.</strong> Куратор — твой главный человек
+          на первом курсе. Он знает ответы на большинство вопросов. Запиши его
+          контакт сразу.
+        </p>
+        <p>
+          <strong>Найди своё расписание.</strong> Расписание —{' '}
+          <Link to="/schedule">здесь</Link> или на сайте КГУ. Добавь в телефон —
+          пары начинаются с первой недели.
+        </p>
+      </>
     ),
   },
+
+  // ★ СЕКЦИЯ 2
   {
-    id: 'first-steps',
-    title: 'Первые шаги',
+    id: 'first-month',
+    title: 'В течение первого месяца',
     icon: Footprints,
     color: 'emerald',
-    // ★ ВПИШИ СЮДА свой текст
     content: (
-      <ul>
-        <li>Найди своего <strong>куратора</strong> и познакомься.</li>
-        <li>Узнай расписание занятий — оно в приложении Chattie.</li>
-        <li>Найди главные кабинеты: дирекция, библиотека, столовая.</li>
-        <li>Подключись к ЕИОС.</li>
-        <li><em>(заглушка — впиши свои пункты)</em></li>
-      </ul>
+      <>
+        <p>
+          <strong>Разберись с ЭИОС и СДО.</strong> В ЭИОС будет вся информация о
+          тебе: результаты сессии, портфолио, баллы ПГАС и многое другое, а в СДО
+          будут даваться задания для выполнения. Если нужно — спроси куратора, как
+          этими системами пользоваться.
+        </p>
+        <p>
+          <strong>Узнай, где что находится.</strong> Деканат, библиотека, столовая,
+          медпункт — обойди корпус и запомни. Или выполни квесты в{' '}
+          <Link to="/chat">Chattie</Link> и получи XP за это.
+        </p>
+        <p>
+          <strong>Вступи в студенческие чаты.</strong> Группа в мессенджере — там
+          объявления, домашки и взаимопомощь. Куратор или староста скинет ссылку.
+        </p>
+
+        <h3>Если что-то непонятно</h3>
+        <p>
+          Не жди — спрашивай сразу. <Link to="/chat">Chattie</Link> отвечает на
+          большинство вопросов мгновенно. Если не знает ответа — переправит к
+          куратору.
+        </p>
+      </>
     ),
   },
+
+  // ★ СЕКЦИЯ 3
   {
     id: 'whats-next',
-    title: 'Что дальше?',
+    title: 'Что дальше',
     icon: Compass,
     color: 'amber',
-    // ★ ВПИШИ СЮДА свой текст
     content: (
-      <p>
-        Закрепи всё, что узнал в первые недели. Адаптация занимает
-        2–3 месяца — это нормально. Главное — не стесняйся задавать
-        вопросы куратору и сокурсникам. <em>(заглушка — впиши свой текст)</em>
-      </p>
+      <>
+        <h3>Учёба</h3>
+        <p>
+          Университет — это не школа. Никто не будет напоминать сдать домашку или
+          идти на пару. Ответственность полностью твоя.
+        </p>
+        <p>
+          <strong>Посещаемость важна.</strong> Пропуски накапливаются быстро, а
+          отработки съедают время, особенно физкультура. Если заболел — предупреди
+          куратора заранее, не после.
+        </p>
+        <p>
+          <strong>Сессия придёт неожиданно.</strong> Первая сессия обычно в январе.
+          Зачёты и экзамены не сдаются за одну ночь — следи за дедлайнами с первых
+          недель.
+        </p>
+        <p>
+          <strong>Преподаватели разные.</strong> У каждого свои правила: кто-то
+          строго по посещаемости, кто-то смотрит только на результат. Узнай правила
+          на первой паре.
+        </p>
+
+        <h3>Жизнь в универе</h3>
+        <p>
+          <strong>Студенческая жизнь — это не только пары.</strong> Мероприятия,
+          объединения, проекты — участвуй хотя бы иногда. Это и опыт, и знакомства,
+          и даже строчка в резюме.
+        </p>
+        <p>
+          <strong>Библиотека — недооценённое место.</strong> Режим с 8:30 до 17:00.
+          Тихо, есть учебники, можно работать. Оформи читательский билет в первые
+          недели — он бесплатный.{' '}
+          <a href="https://go.2gis.com/IE59G" target="_blank" rel="noreferrer">Карта</a>.
+        </p>
+        <p>
+          <strong>Столовая работает по расписанию.</strong> Режим с 8:00 до 16:00.
+          Обеденный перерыв между парами с 13:20 до 14:00. Приходи чуть раньше,
+          потому что большая очередь.{' '}
+          <a href="https://go.2gis.com/fcpMz" target="_blank" rel="noreferrer">Карта</a>.
+        </p>
+        <p>
+          <strong>Ковёркинг.</strong> В ИВИТШ есть своё пространство для работы и
+          отдыха — 4 этаж. Можно прийти между парами, поработать над проектом или
+          просто провести время. Свободный вход для студентов ИВИТШ.
+        </p>
+
+        <h3>Деньги и льготы</h3>
+        <p>
+          Оформи студенческий проездной — существенная скидка на транспорт.
+          Документы через деканат.
+        </p>
+        <p>
+          Если есть право на стипендию — узнай условия у куратора. Нужно закрыть
+          первую сессию без троек.
+        </p>
+      </>
     ),
   },
 ]
-// ─── /СЕКЦИИ ──────────────────────────────────────────────────────────────
+// ─── /СЕКЦИИ ─────────────────────────────────────────────────────────────
 
 export function GuidePage() {
-  // Хранит id открытой секции (только одна за раз). null = всё свёрнуто.
   const [openId, setOpenId] = useState<string | null>(null)
 
   function toggle(id: string) {
@@ -130,10 +204,11 @@ export function GuidePage() {
     <main className="p-4 md:p-6 max-w-4xl mx-auto">
       <header className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
-          Инструкция первокурсника
+          Добро пожаловать в ИВИТШ
         </h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
-          Что делать в первые дни, недели и месяцы. Раскрой нужный раздел.
+        <p className="text-sm text-muted-foreground mt-1">
+          Первые дни в универе — это хаос. Вот что делать по порядку, чтобы
+          не потеряться.
         </p>
       </header>
 
@@ -147,6 +222,9 @@ export function GuidePage() {
           />
         ))}
       </div>
+
+      {/* Призыв обратиться к Chattie */}
+      <ChattieCallout />
     </main>
   )
 }
@@ -154,14 +232,8 @@ export function GuidePage() {
 // ─── Карточка-секция (аккордеон) ─────────────────────────────────────────
 
 function SectionCard({
-  section,
-  isOpen,
-  onToggle,
-}: {
-  section: Section
-  isOpen: boolean
-  onToggle: () => void
-}) {
+  section, isOpen, onToggle,
+}: { section: Section; isOpen: boolean; onToggle: () => void }) {
   const Icon = section.icon
   const c = COLOR_STYLES[section.color]
 
@@ -169,20 +241,15 @@ function SectionCard({
     <div
       className={cn(
         'rounded-2xl border-2 overflow-hidden transition-all',
-        c.border,
-        c.bg,
+        c.border, c.bg,
         isOpen && cn('shadow-md ring-1', c.ring),
       )}
     >
-      {/* Заголовок-кнопка */}
       <button
         type="button"
         onClick={onToggle}
         aria-expanded={isOpen}
-        className={cn(
-          'w-full flex items-center gap-4 p-4 md:p-5 text-left transition-colors',
-          c.bgHover,
-        )}
+        className={cn('w-full flex items-center gap-4 p-4 md:p-5 text-left transition-colors', c.bgHover)}
       >
         <span className={cn('flex h-10 w-10 shrink-0 items-center justify-center rounded-xl', c.iconBg)}>
           <Icon size={20} className={c.text} />
@@ -199,7 +266,6 @@ function SectionCard({
         </motion.span>
       </button>
 
-      {/* Раскрывающийся контент */}
       <AnimatePresence initial={false}>
         {isOpen && (
           <motion.div
@@ -216,6 +282,25 @@ function SectionCard({
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+// ─── Призыв обратиться к чат-боту ────────────────────────────────────────
+
+function ChattieCallout() {
+  return (
+    <div className="mt-8 rounded-2xl border-2 border-primary/30 bg-primary/[0.06] p-4 md:p-5 flex items-center gap-3">
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15">
+        <Sparkles size={20} className="text-primary" />
+      </span>
+      <p className="text-[14px] text-foreground leading-snug">
+        Если есть вопросы — ты всегда можешь задать их{' '}
+        <Link to="/chat" className="text-primary font-semibold underline underline-offset-2 hover:no-underline">
+          Chattie
+        </Link>
+        .
+      </p>
     </div>
   )
 }

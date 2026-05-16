@@ -10,6 +10,7 @@ from backend.api.lessons import router as lessons_router
 from backend.api.users import router as users_router
 from backend.api.quests import router as quests_router
 from backend.api.chat import router as chat_router
+from backend.api.tickets import router as tickets_router
 
 from backend.database import engine, Base, new_session
 from backend.models.quest import QuestModel
@@ -70,6 +71,7 @@ main_router.include_router(users_router)
 main_router.include_router(events_router)
 main_router.include_router(quests_router)
 main_router.include_router(chat_router)
+main_router.include_router(tickets_router)
 
 
 @main_router.get('/get_admin_key')

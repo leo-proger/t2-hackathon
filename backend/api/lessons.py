@@ -1,5 +1,5 @@
 import datetime
-from datetime import date, timedelta
+from datetime import timedelta
 
 from fastapi import APIRouter, Request, Query
 from sqlalchemy import select, or_
@@ -14,6 +14,13 @@ from backend.secret_model import user_request_validity
 
 router = APIRouter(prefix='/schedule', tags=['lessons'])
 
+date_default = Query(
+    default=datetime.date.today(),
+    description="Дата расписания",
+    example="2026-05-15",
+    ge=datetime.date.today() - timedelta(days=30),  # не раньше чем через 30 дней
+    le=datetime.date.today() + timedelta(days=30)  # не позже чем через 30 дней
+)
 
 @router.get('/today')
 async def personal_today(request: Request, session: SessionDep):
@@ -43,14 +50,9 @@ async def personal_today(request: Request, session: SessionDep):
 
 
 @router.post('')
-async def get_on_date(request: Request, session: SessionDep, date: date = Query(
-        default=datetime.date.today(),
-        description="Дата расписания",
-        example="2026-05-15",
-        ge=date.today() - timedelta(days=30),  # не раньше чем через 30 дней
-        le=date.today() + timedelta(days=30)  # не позже чем через 30 дней
-    )):
+async def get_on_date(request: Request, session: SessionDep, date: datetime.date = date_default):
     """
+    :param date:
     :param request:
     :param session:
     :return:

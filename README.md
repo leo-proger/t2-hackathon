@@ -6,7 +6,7 @@
 
 ```
 frontend/   — React 19 + Vite 8 + Tailwind v4 + shadcn/ui
-backend/    — TBD
+backend/    — FastAPI + SQLAlchemy (async) + authx JWT
 ```
 
 ## Запуск frontend
@@ -28,166 +28,80 @@ npm run dev
 
 ## Контракт API (что должен реализовать бэкенд)
 
-Все ответы — JSON. Все эндпоинты под префиксом, который задаётся `VITE_API_BASE_URL`.
+Все ответы — JSON. Бэкенд поднят на FastAPI. Фронт читает `VITE_API_BASE_URL`, все пути начинаются с `/api`.
+Аутентификация — через куки (JWT), которые бэкенд ставит сам; фронт отправляет их с `credentials: 'include'`.
 
-### `POST /api/users/login`
+### Auth
 
-Аутентификация пользователя
-
-**Вход**
+#### `POST /api/users/login`
 ```json
-{
-  "email": "user@example.com",
-  "password": "string"
-}
-```
-**Выход**
-```json
-{
-  "ok": true,
-  "access_token": "access jwt",
-  "refresh_token": "refresh jwt"
-}
+// request
+{ "email": "user@example.com", "password": "string" }
+// response
+{ "ok": true, "access_token": "...", "refresh_token": "..." }
+// + устанавливает куки JWT
 ```
 
-### `GET /api/users/refresh`
+#### `GET /api/users/refresh`
+```json
+// response — обновляет оба токена через куки
+{ "ok": true, "access_token": "...", "refresh_token": "..." }
+```
 
-Обновление `Acccess JWT` для пользователя.
-
+#### `GET /api/users/me`
 ```json
 {
-  "ok": true,
-  "access_token": "access jwt",
-  "refresh_token": "refresh jwt"
+  "id": 1, "name": "Артём", "faculty": "ИВИТШ",
+  "group": "00-XXбо-0", "year": 1, "simestr": 1,
+  "xp": 340, "level": 3, "adaptationProgress": 62
 }
 ```
 
-### `GET /api/users/me`
+### Расписание
 
-Профиль текущего пользователя.
-
+#### `GET /api/lessons/today`
 ```json
-{
-  "id": "u1",
-  "name": "Артём",
-  "faculty": "ИВИТШ",
-  "group": "00-XXбо-0",
-  "year": 1,
-  "simestr": 1,
-  "xp": 340,
-  "level": 3,
-  "adaptationProgress": 62
-}
+[{ "id": 1, "lesson_number": 1, "name": "Мат. анализ", "room": "ауд. 214", "teacher": "Иванова Л.А." }]
 ```
 
-### `GET /api/schedule/today`
+#### `GET /api/lessons?date=YYYY-MM-DD`
+Тот же формат.
 
-Расписание занятий на сегодня. Массив объектов `Lesson`:
+### Квесты
 
+#### `GET /api/quests/active`
+```json
+[{ "id": "q1", "label": "Найди 301 ауд.", "description": "...", "xp": 50, "done": false }]
+```
+
+### Чат
+
+#### `GET /api/chat/history`
+Возвращает массив объектов с обёрткой `message`:
 ```json
 [
-  {
-    "id": "l1",
-    "lesson_number": 1,
-    "name": "Математический анализ",
-    "room": "ауд. 214",
-    "teacher": "Иванова Л.А."
-  }
+  { "message": { "id": 0, "role": "user", "text": "Вопрос", "timestamp": "2026-05-16 10:00:00" } },
+  { "message": { "id": 1, "role": "bot",  "text": "Ответ",  "timestamp": "2026-05-16 10:00:01" } }
 ]
 ```
+> Пустой массив `[]` если история ещё пуста.
 
-### `GET /api/schedule?date=YYYY-MM-DD`
-
-Расписание на произвольную дату. Тот же формат, что и `/today`.
-
-### `GET /api/quests/active`
-
-Активные квесты пользователя.
-
+#### `POST /api/chat/message`
 ```json
-[
-  { "id": "q1", "label": "Найдено-ненайдено", "description": "Найди 404 ауд.", "xp": 50, "done": false }
-]
+// request
+{ "sessionId": "default", "text": "Где деканат?" }
+// response — только ответ бота
+{ "message": { "id": 1, "role": "bot", "text": "Каб. 112.", "timestamp": "2026-05-16 10:00:01" } }
 ```
 
+### Тикеты
 
-### `GET /api/checklist`
-
-Чек-лист онбординга.
-
-```json
-[
-  { "id": "c1", "label": "Зарегистрироваться", "done": true }
-]
-```
-
-### `POST /api/checklist/:id/complete`
-
-Отметить пункт чек-листа выполненным. Возвращает обновлённый item.
-
-### `GET /api/daily-task`
-
-Задание дня.
-
-```json
-{
-  "id": "dt1",
-  "title": "Найди 301 аудиторию",
-  "description": "Сфотографируй табличку у входа и загрузи фото",
-  "xp": 50,
-  "deadline": "23:59",
-  "completed": false
-}
-```
-
-### `POST /api/daily-task/:id/complete`
-
-Выполнить задание дня. Возвращает обновлённый task.
-
-### `GET /api/chat/history`
-
-История сообщений с ботом Chattie.
-
-```json
-[
-  {
-    "id": "m1",
-    "role": "user",
-    "text": "Как получить студенческий билет?",
-    "timestamp": "2026-05-15T08:30:00Z"
-  }
-]
-```
-
-`role` — `"user"` или `"bot"`.
-
-### `POST /api/chat/message`
-
-Отправить сообщение боту.
-
-**Request:**
-```json
-{ "sessionId": "default", "text": "Где находится деканат?" }
-```
-
-**Response:**
-```json
-{
-  "message": {
-    "id": "m42",
-    "role": "bot",
-    "text": "Деканат на 1 этаже, каб. 112.",
-    "timestamp": "2026-05-15T08:31:00Z"
-  }
-}
-```
+#### `GET /api/tickets` / `POST /api/tickets` — список тикетов и создание нового (см. backend/api/tickets.py)
 
 ## Что будет в будущих версиях
 
-| Эндпоинт                         | Версия | Описание                                      |
-|----------------------------------|--------|-----------------------------------------------|
-| `GET /api/teachers/:id`          | v1     | Карточка преподавателя                        |
-| `GET /api/buildings`             | v1     | Корпуса университета (страница «Корпус»)      |
-| `POST /api/quests/:id/complete`  | v1     | Завершение квеста (выдача XP)                 |
-| `GET /api/tutors`                | v1     | Список тьюторов для связи                     |
-| `POST /api/feedback`             | v1     | 👍/👎 на ответ бота                           |
+| Эндпоинт                        | Версия | Описание                            |
+|---------------------------------|--------|-------------------------------------|
+| `POST /api/quests/:id/complete` | v1     | Завершение квеста (выдача XP)       |
+| `GET /api/tutors`               | v1     | Список тьюторов                     |
+| `POST /api/feedback`            | v1     | 👍/👎 на ответ бота (петля фидбека) |

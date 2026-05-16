@@ -5,6 +5,7 @@ import { useQuests } from '@/hooks/useQuests'
 import { useUser } from '@/contexts/UserContext'
 import { cn } from '@/lib/utils'
 import type { LeaderboardEntry, Quest } from '@/types'
+import { PageTransition } from '@/components/PageTransition'
 
 const TABS = ['Мои квесты', 'Рейтинг'] as const
 type Tab = typeof TABS[number]
@@ -39,6 +40,7 @@ export function QuestsPage() {
   const total = quests?.length ?? 0
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-2xl mx-auto">
       <header className="mb-5">
         <h1 className="text-3xl font-bold tracking-tight">Квесты</h1>
@@ -109,6 +111,7 @@ export function QuestsPage() {
         )}
       </AnimatePresence>
     </main>
+    </PageTransition>
   )
 }
 

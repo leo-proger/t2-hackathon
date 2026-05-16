@@ -5,12 +5,14 @@ import { useQuests } from '@/hooks/useQuests'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { ScheduleCard } from '@/components/dashboard/ScheduleCard'
 import { QuestsCard } from '@/components/dashboard/QuestsCard'
+import { PageTransition } from '@/components/PageTransition'
 
 export function DashboardPage() {
   const { user, loading: userLoading } = useUser()
   const quests = useQuests()
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-3">
       <WelcomeCard user={user} loading={userLoading} />
 
@@ -38,5 +40,6 @@ export function DashboardPage() {
 
       <QuestsCard quests={quests.data ?? []} loading={quests.loading} />
     </main>
+    </PageTransition>
   )
 }

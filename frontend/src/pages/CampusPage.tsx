@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { PageTransition } from '@/components/PageTransition'
 import { MapPin, Phone, Mail, Clock, Globe, GraduationCap, Building2 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { INSTITUTES, type Institute } from '@/data/institutes'
@@ -10,6 +11,7 @@ export function CampusPage() {
   const active = INSTITUTES.find((i) => i.id === activeId) ?? INSTITUTES[0]
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-5xl mx-auto">
       <header className="mb-5">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">Корпуса</h1>
@@ -72,6 +74,7 @@ export function CampusPage() {
         </motion.div>
       </AnimatePresence>
     </main>
+    </PageTransition>
   )
 }
 

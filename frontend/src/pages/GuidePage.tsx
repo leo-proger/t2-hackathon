@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, Rocket, Footprints, Compass, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { PageTransition } from '@/components/PageTransition'
 
 // ╔═══════════════════════════════════════════════════════════════════════╗
 // ║  ИНСТРУКЦИЯ ПЕРВОКУРСНИКА — редактируй массив SECTIONS ниже.          ║
@@ -201,6 +202,7 @@ export function GuidePage() {
   }
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-4xl mx-auto">
       <header className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -226,6 +228,7 @@ export function GuidePage() {
       {/* Призыв обратиться к Chattie */}
       <ChattieCallout />
     </main>
+    </PageTransition>
   )
 }
 

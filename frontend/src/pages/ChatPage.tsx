@@ -48,8 +48,9 @@ export function ChatPage() {
   function toggleFeedback(id: string, value: Feedback) {
     if (value === 'down') {
       if (disliked.has(id)) return
-      const msg = messages.find((m) => m.id === id)
-      if (msg) void createTicket(msg.text)
+      const botIdx = messages.findIndex((m) => m.id === id)
+      const userMsg = botIdx > 0 ? messages.slice(0, botIdx).findLast((m) => m.role === 'user') : null
+      if (userMsg) void createTicket(userMsg.text)
       setDisliked((prev) => new Set(prev).add(id))
       setFeedback((prev) => ({ ...prev, [id]: 'down' }))
       return
@@ -64,20 +65,12 @@ export function ChatPage() {
 
   return (
     <div className="flex flex-col h-[calc(100vh-57px)]">
-      {/* Заголовок */}
-      <div className="px-4 md:px-6 py-4 border-b border-border/60 bg-background/80 backdrop-blur-md flex items-center gap-3">
-        <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-primary/15">
-          <Sparkles size={16} className="text-primary" />
-        </span>
-        <div>
-          <h1 className="text-[15px] font-semibold leading-tight">Chattie</h1>
-          <p className="text-[11px] text-muted-foreground">ИИ-помощник первокурсника ИВИТШ</p>
-        </div>
-      </div>
-
       {/* Область сообщений */}
       <div className="flex-1 overflow-y-auto px-4 md:px-6 py-4">
         <div className="max-w-2xl mx-auto flex flex-col gap-3">
+
+          {/* Маскот — всегда в самом верху диалога */}
+          <ChatHeader />
 
           {loading && <LoadingSkeleton />}
 
@@ -237,15 +230,30 @@ function FeedbackButton({
   )
 }
 
+// ─── Маскот-шапка (всегда вверху диалога) ────────────────────────────────────
+
+function ChatHeader() {
+  return (
+    <div className="flex flex-col items-center text-center pt-4 pb-2">
+      <img
+        src="/mascot.png"
+        alt="Chattie"
+        className="w-28 md:w-36 select-none drop-shadow-xl"
+        style={{ mixBlendMode: 'multiply' }}
+      />
+      <p className="text-[16px] font-bold text-foreground mt-2 leading-tight">Chattie</p>
+      <p className="text-[13px] text-muted-foreground mt-0.5">
+        ИИ-помощник первокурсника ИВИТШ
+      </p>
+    </div>
+  )
+}
+
 // ─── Приветственный экран (пустой чат) ───────────────────────────────────────
 
 function WelcomeState() {
   return (
-    <div className="flex flex-col items-center text-center py-12 gap-3">
-      <span className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
-        <Sparkles size={28} className="text-primary" />
-      </span>
-      <p className="text-[15px] font-semibold text-foreground">Привет! Я Chattie</p>
+    <div className="flex flex-col items-center text-center pb-6 gap-2">
       <p className="text-[13px] text-muted-foreground max-w-xs">
         Знаю всё про ИВИТШ — расписание, корпус, преподавателей и документы.
         Спроси что угодно или выбери подсказку снизу.

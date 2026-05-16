@@ -48,9 +48,9 @@ export function Navbar() {
     <div ref={menuRef} className="sticky top-0 z-50">
       <nav className="flex items-center justify-between px-4 md:px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/90">
         {/* Логотип */}
-        <RouterLink to="/" className="flex items-center gap-2">
-          <Sparkles className="text-primary" size={18} />
-          <span className="text-[15px] font-semibold tracking-tight text-foreground">
+        <RouterLink to="/" className="flex items-center gap-2.5">
+          <Sparkles className="text-primary" size={22} />
+          <span className="text-[19px] font-bold tracking-tight text-foreground">
             Chatt<span className="text-primary">ie</span>
           </span>
         </RouterLink>

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { MessageCircleQuestion, Send, Loader2, CheckCircle2 } from 'lucide-react'
+import { PageTransition } from '@/components/PageTransition'
 import { getActualTickets, answerTicket } from '@/services/ticket.service'
 import type { Ticket } from '@/types'
 import { cn } from '@/lib/utils'
@@ -31,6 +32,7 @@ export function TeacherTicketsPage() {
   }
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-4">
       <div className="flex items-center gap-3 mb-1">
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10">
@@ -88,6 +90,7 @@ export function TeacherTicketsPage() {
         </div>
       ))}
     </main>
+    </PageTransition>
   )
 }
 

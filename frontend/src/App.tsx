@@ -13,6 +13,7 @@ import { ChatPage } from '@/pages/ChatPage'
 import { CampusPage } from '@/pages/CampusPage'
 import { QuestsPage } from '@/pages/QuestsPage'
 import { TeacherTicketsPage } from '@/pages/TeacherTicketsPage'
+import { AuthGate } from '@/components/AuthGate'
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth()
@@ -43,17 +44,34 @@ function AppRoutes() {
           element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />}
         />
 
-        {/* Страницы студента — доступны всем как превью */}
-        <Route path="/schedule" element={<SchedulePage />} />
-        <Route path="/guide" element={<GuidePage />} />
-        <Route path="/chat" element={<ChatPage />} />
-        <Route path="/campus" element={<CampusPage />} />
+        {/* Страницы студента — с заглушкой для незалогиненных */}
+        <Route path="/schedule" element={
+          <AuthGate hint="Войдите, чтобы увидеть расписание">
+            <SchedulePage />
+          </AuthGate>
+        } />
+        <Route path="/guide" element={
+          <AuthGate hint="Войдите, чтобы читать инструкцию">
+            <GuidePage />
+          </AuthGate>
+        } />
+        <Route path="/chat" element={
+          <AuthGate hint="Войдите, чтобы общаться с Chattie">
+            <ChatPage />
+          </AuthGate>
+        } />
+        <Route path="/campus" element={
+          <AuthGate hint="Войдите, чтобы посмотреть корпус">
+            <CampusPage />
+          </AuthGate>
+        } />
 
         {/* Защищённые страницы студента */}
-        <Route
-          path="/quests"
-          element={isAuthenticated ? <QuestsPage /> : <Navigate to="/login" replace />}
-        />
+        <Route path="/quests" element={
+          <AuthGate hint="Войдите, чтобы проходить квесты">
+            <QuestsPage />
+          </AuthGate>
+        } />
 
         {/* Вопросы студентов — только для преподавателей */}
         <Route

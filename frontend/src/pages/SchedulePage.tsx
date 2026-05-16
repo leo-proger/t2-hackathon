@@ -1,4 +1,5 @@
 import { useState, useEffect, Fragment } from 'react'
+import { PageTransition } from '@/components/PageTransition'
 import { ChevronLeft, ChevronRight, CalendarDays, Coffee } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { RoomButton } from '@/components/RoomButton'
@@ -34,6 +35,7 @@ export function SchedulePage() {
   const showStatus = isToday(date)
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-4xl mx-auto">
       {/* Заголовок + переключатель даты */}
       <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
@@ -78,6 +80,7 @@ export function SchedulePage() {
         </ul>
       )}
     </main>
+    </PageTransition>
   )
 }
 

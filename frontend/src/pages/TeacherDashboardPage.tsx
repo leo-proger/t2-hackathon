@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, MessageCircleQuestion } from 'lucide-react'
 import { useUser } from '@/hooks/useUser'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
+import { PageTransition } from '@/components/PageTransition'
 import { getActualTickets } from '@/services/ticket.service'
 import type { Ticket } from '@/types'
 
@@ -18,6 +19,7 @@ export function TeacherDashboardPage() {
   }, [])
 
   return (
+    <PageTransition>
     <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-3">
       <WelcomeCard user={user} loading={userLoading} />
 
@@ -74,5 +76,6 @@ export function TeacherDashboardPage() {
         )}
       </div>
     </main>
+    </PageTransition>
   )
 }

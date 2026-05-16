@@ -11,7 +11,7 @@ export function useChat() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    getChatHistory(SESSION_ID)
+    getChatHistory()
       .then(setMessages)
       .catch((e) => setError(e instanceof Error ? e.message : 'Ошибка загрузки чата'))
       .finally(() => setLoading(false))
@@ -21,7 +21,6 @@ export function useChat() {
     const trimmed = text.trim()
     if (!trimmed || sending) return
 
-    // Оптимистично добавляем сообщение пользователя
     const userMsg: ChatMessage = {
       id: `tmp-${Date.now()}`,
       role: 'user',

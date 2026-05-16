@@ -37,7 +37,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       // Реальный API: POST /users/login
       // Бэкенд ставит куки JWT автоматически, нам нужно только проверить ok
-      const res = await api.post<LoginResponse>('/users/login', { email, password })
+      const res = await api.post<LoginResponse>('/api/users/login', { email, password })
       if (res.ok) {
         setIsAuthenticated(true)
         localStorage.setItem('chattie_auth', 'true')

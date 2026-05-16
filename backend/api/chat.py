@@ -11,8 +11,9 @@ from backend.secret_model import user_request_validity
 
 router = APIRouter(prefix='/chat', tags=['chat'])
 
-def mess_to_format(message, role, id_message):
-    d = {
+
+def mess_to_format(message, role, id_message) -> dict:
+    return {
         "message": {
             "id": id_message,
             "role": role,
@@ -20,17 +21,10 @@ def mess_to_format(message, role, id_message):
             "timestamp": str(datetime.datetime.now())
         }
     }
-    return d
 
 
 @router.get('/history')
-async def history(request: Request, session: SessionDep):
-    """
-    :param request:
-    :param session:
-    :return:
-    """
-
+async def get_history(request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
     # try:
@@ -42,13 +36,7 @@ async def history(request: Request, session: SessionDep):
 
 
 @router.post('/message')
-async def history(message: MessageSchema, request: Request, session: SessionDep):
-    """
-    :param request:
-    :param session:
-    :return:
-    """
-
+async def send_message(message: MessageSchema, request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
     data = await main_agent.ask_question(message.text)

@@ -3,23 +3,28 @@ import { mockChatHistory, mockDelay } from '@/mocks'
 import type { ChatMessage, SendMessageRequest } from '@/types'
 
 const MOCK_BOT_REPLIES = [
-  'Уточняю информацию — отвечу совсем скоро!',
-  'Хороший вопрос! Рекомендую обратиться в деканат (каб. 112).',
+  'Хороший вопрос! Рекомендую обратиться в деканат (каб. Б-209).',
   'Это стандартная ситуация для первокурсников. Твой куратор точно поможет!',
   'Загляни на страницу «Корпус» — там есть карта и контакты.',
+  'Студенческий выдают в дирекции (ауд. Б-209). Возьми паспорт и 2 фото 3×4.',
+  'Расписание доступно на странице «Расписание» или на сайте КГУ.',
 ]
 
-export async function getChatHistory(_sessionId: string): Promise<ChatMessage[]> {
+// История: бэкенд возвращает [{message: ChatMessage}, ...] с обёрткой
+type HistoryItem = { message: ChatMessage }
+
+export async function getChatHistory(): Promise<ChatMessage[]> {
   if (USE_MOCK) {
     await mockDelay()
     return mockChatHistory
   }
-  return api.get<ChatMessage[]>(`/api/chat/history`)
+  const items = await api.get<HistoryItem[]>('/api/chat/history')
+  return items.map((item) => item.message)
 }
 
 export async function sendMessage(req: SendMessageRequest): Promise<ChatMessage> {
   if (USE_MOCK) {
-    await mockDelay(700)
+    await mockDelay(900)
     const reply = MOCK_BOT_REPLIES[Math.floor(Math.random() * MOCK_BOT_REPLIES.length)]
     return {
       id: `m-${Date.now()}`,

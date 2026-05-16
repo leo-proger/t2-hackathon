@@ -134,7 +134,7 @@ class QuestionParser:
     def add_answer(self, question: str, answer: str) -> None:
         self.questions[question] = answer
         with pathlib.Path('data_files/question_base.json').open('w', encoding="utf-8") as f:
-            f.write(json.dumps(self.questions))
+            json.dump(self.questions, f, ensure_ascii=False, indent=4)
 
     def __update_questions(self):
         with pathlib.Path('data_files/question_base.json').open("r", encoding='utf-8') as f:

@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+from random import randint
+
 from authx import exceptions
 from fastapi import APIRouter, HTTPException, Response, Request
 from sqlalchemy import select, update
@@ -172,3 +176,18 @@ async def me(request: Request, session: SessionDep):
     result = result.unique().scalars().all()[0]
 
     return UserMeMapper.to_schem(result)
+
+@router.get('/sovet_day')
+async def sovet_day(request: Request):
+    """
+    :param request:
+    :param session:
+    :return:
+    """
+    await user_request_validity(request, StatusEnum.all)
+
+    print(Path().cwd())
+    with Path().cwd().joinpath("data_files/sovets.json").open('r', encoding="utf-8") as f:
+        result = json.load(f)
+
+    return result[randint(0, len(result) - 1)]

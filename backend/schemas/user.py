@@ -22,6 +22,7 @@ class UserMeSchema(BaseModel):
     name: str
     faculty:str
     group: str
+    status: str
     year: int
     simestr: int
     xp: int

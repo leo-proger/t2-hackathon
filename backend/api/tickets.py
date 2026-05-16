@@ -3,6 +3,7 @@ import datetime
 from fastapi import APIRouter, Request
 from sqlalchemy import select
 
+from backend.agent.question_pars import QP
 from backend.api.dependencies import SessionDep
 from backend.models.ticket import TicketModel
 from backend.models.user import StatusEnum, UserModel
@@ -45,6 +46,9 @@ async def answer(data: AnswerTicketSchema,request: Request, session: SessionDep)
     ticket = result.scalars().all()
     if not ticket:
         return False
+
+    QP.add_answer(ticket[0].question, data.answer)
+    await session.delete(ticket[0])
 
     query = select(UserModel).filter(UserModel.id == ticket[0].who_asked)
     result = await session.execute(query)

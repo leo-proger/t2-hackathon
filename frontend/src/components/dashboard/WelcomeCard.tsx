@@ -12,7 +12,7 @@ export function WelcomeCard({ user, loading }: Props) {
   const subtitle =
     user.status === 'teacher'
       ? user.faculty
-      : `${user.faculty} · ${user.group} · ${user.year} курс`
+      : `${user.faculty} · ${user.year} курс · ${user.group}`
 
   return (
     <div className="rounded-2xl border border-primary/20 bg-primary/8 p-5 flex flex-col h-full overflow-hidden">

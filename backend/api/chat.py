@@ -11,9 +11,10 @@ from backend.secret_model import user_request_validity
 
 router = APIRouter(prefix='/chat', tags=['chat'])
 
-def mess_to_format(message, role):
+def mess_to_format(message, role, id_message):
     d = {
         "message": {
+            "id": id_message,
             "role": role,
             "text": message,
             "timestamp": str(datetime.datetime.now())
@@ -32,8 +33,12 @@ async def history(request: Request, session: SessionDep):
 
     user = await user_request_validity(request, StatusEnum.all, session)
 
-    print(f"[{user.chat_history}]")
+    # try:
+    print(user.chat_history)
     return json.loads(f"[{user.chat_history}]")
+    # except Exception as e:
+    #     print(e)
+    #     return f"[{user.chat_history}]"
 
 
 @router.post('/message')
@@ -48,15 +53,16 @@ async def history(message: MessageSchema, request: Request, session: SessionDep)
 
     data = await main_agent.ask_question(message.text)
 
-    if user.chat_history != "":
-        history = user.chat_history + ", "
-    else:
+    if user.count_messages == 0:
         history = ""
+    else:
+        history = user.chat_history + ", "
 
-    bot_say = mess_to_format(data, 'bot')
-    history += f"{mess_to_format(message.text, 'user')}, {bot_say}"
-    user.chat_history = history
+    bot_say = mess_to_format(data, 'bot', user.count_messages+1)
+    history += f"{mess_to_format(message.text, 'user', user.count_messages)}, {bot_say}"
+
+    user.chat_history = history.replace("'", "\"")
+    user.count_messages = user.count_messages + 2
 
     await session.commit()
     return bot_say
-[{'message': {'role': 'user', 'text': MessageSchema(sessionId='Какая погода?', text='Какая погода'), 'timestamp': '2026-05-16 04:48:12.306939'}}, {'message': {'role': 'bot', 'text': 'Я ваще хз', 'timestamp': '2026-05-16 04:48:12.306926'}}, {'message': {'role': 'user', 'text': MessageSchema(sessionId='Как связаться с администрацией?', text='Какая погода'), 'timestamp': '2026-05-16 04:54:40.168608'}}, {'message': {'role': 'bot', 'text': '\n\nЯ помогаю только с вопросами об университете и студенческой жизни. Ваш запрос о погоде не входит в мою компетенцию — я не могу предоставлять информацию о погодных условиях, так как это не связано с учебной деятельностью, кампусом или студенческой инфраструктурой.', 'timestamp': '2026-05-16 04:54:40.168598'}}, {'message': {'role': 'user', 'text': MessageSchema(sessionId='Как связаться с администрацией?', text='Как связаться с администрацией?'), 'timestamp': '2026-05-16 04:56:07.645068'}}, {'message': {'role': 'bot', 'text': None, 'timestamp': '2026-05-16 04:56:07.645060'}}]

@@ -6,6 +6,7 @@ import { useUser } from '@/hooks/useUser'
 
 const NAV_LINKS = [
   { label: 'Главная',     to: '/' },
+  { label: 'Чат',         to: '/chat' },
   { label: 'Расписание',  to: '/schedule' },
   { label: 'Инструкция',  to: '/guide' },
   { label: 'Квесты',      to: '/quests' },

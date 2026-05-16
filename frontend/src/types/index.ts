@@ -33,10 +33,18 @@ export interface Lesson {
 // ─── Quests ───────────────────────────────────────────────────────────────────
 
 export interface Quest {
-  id: string
+  id: number
   label: string
+  description: string
   xp: number
-  progress: number  // 0-100
+  done: boolean
+}
+
+export interface LeaderboardEntry {
+  rank: number
+  name: string
+  xp: number
+  isMe?: boolean
 }
 
 // ─── Checklist ────────────────────────────────────────────────────────────────

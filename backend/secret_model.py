@@ -29,8 +29,8 @@ security = AuthX(config=config)
 hash_model = hashlib.sha1
 
 dict_users_rec = {}
-max_user_rec = 1000
-min_time_user_rec = 3
+max_user_rec = 1000000
+min_time_user_rec = 0
 
 
 def hashing(text):

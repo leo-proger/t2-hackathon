@@ -21,9 +21,11 @@ export const mockUser: User = {
 }
 
 export const mockQuests: Quest[] = [
-  { id: 'q1', label: 'Найди 301 ауд.',      xp: 50,  progress: 60 },
-  { id: 'q2', label: 'Задай вопрос преподу', xp: 30,  progress: 30 },
-  { id: 'q3', label: '7-дневный стрик',      xp: 100, progress: 70 },
+  { id: 1, label: 'Первое знакомство',  description: 'Познакомься с тремя одногруппниками и запиши их имена.',                                               xp: 20,  done: false },
+  { id: 2, label: 'Карта кампуса',      description: 'Найди и отметь на карте кампуса 5 ключевых локаций: главный корпус, столовая, библиотека, спортзал.',   xp: 25,  done: true  },
+  { id: 3, label: 'Найдено-ненайдено',  description: 'Найди 404 аудиторию.',                                                                                  xp: 15,  done: false },
+  { id: 4, label: 'Устав — наше всё',   description: 'Прочитай устав университета и отметь 3 самых важных правила.',                                          xp: 30,  done: false },
+  { id: 5, label: 'Студенческий билет', description: 'Получи студенческий билет, сфотографируй и сохрани фото.',                                              xp: 10,  done: true  },
 ]
 
 export const mockChecklist: ChecklistItem[] = [

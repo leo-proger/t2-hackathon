@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { ArrowRight, Zap } from 'lucide-react'
+import { ArrowRight, Zap, CheckCircle2 } from 'lucide-react'
 import type { Quest } from '@/types'
 
 interface Props {
@@ -30,7 +30,9 @@ export function QuestsCard({ quests, loading }: Props) {
         {visible.map((quest) => (
           <li key={quest.id} className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 min-w-0">
-              <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" />
+              {quest.done
+                ? <CheckCircle2 size={13} className="text-emerald-500 shrink-0" />
+                : <span className="h-2 w-2 rounded-full bg-emerald-400 shrink-0" />}
               <span className="text-[12px] text-foreground font-medium truncate">{quest.label}</span>
             </div>
             <span className="flex items-center gap-0.5 text-[11px] font-semibold text-emerald-600 shrink-0">

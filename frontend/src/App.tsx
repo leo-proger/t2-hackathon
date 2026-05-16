@@ -8,6 +8,7 @@ import { SchedulePage } from '@/pages/SchedulePage'
 import { GuidePage } from '@/pages/GuidePage'
 import { ChatPage } from '@/pages/ChatPage'
 import { CampusPage } from '@/pages/CampusPage'
+import { QuestsPage } from '@/pages/QuestsPage'
 
 function AppRoutes() {
   const { isAuthenticated } = useAuth()
@@ -37,7 +38,7 @@ function AppRoutes() {
         {/* Защищённые страницы */}
         <Route
           path="/quests"
-          element={isAuthenticated ? <div className="p-6">Квесты — скоро</div> : <Navigate to="/login" replace />}
+          element={isAuthenticated ? <QuestsPage /> : <Navigate to="/login" replace />}
         />
         <Route
           path="/tutor"

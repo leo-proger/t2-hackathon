@@ -27,7 +27,8 @@ class UserMeMapper:
             year=model.year,
             simestr=model.simestr,
             xp=model.xp,
-            level=model.level,
+            level=model.xp // 100,
+            levelProgress=model.xp % 100,
             adaptationProgress=model.adaptationProgress,
         )
 

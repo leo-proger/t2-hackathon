@@ -26,6 +26,7 @@ class UserMeSchema(BaseModel):
     simestr: int
     xp: int
     level: int
+    levelProgress: int
     adaptationProgress: int
 
 

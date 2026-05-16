@@ -62,40 +62,46 @@ class MainAgent:
         return None
 
     async def ask_question(self, question: str) -> str:
-        prompt = [
-            {"role": "system", "content": self.prompt1},
-            {"role": "user",   "content": question},
-        ]
+        data = await QP.new_question_big(question)
 
-        try:
-            response = await self.ai_model.send_message(prompt)
-            message = response.choices[0].message
+        if data is None:
+            data = await QP.new_question_litle(question)
 
-            if message.tool_calls:
-                result = await self.tools_call(message.tool_calls)
-            else:
-                result = message.content
+        return data
 
-            if not result:
-                return _ERR_EMPTY
 
-            return result
 
-        except RateLimitError as e:
-            print("RateLimitError:", e)
-            return _ERR_RATE_LIMIT
-        except APITimeoutError as e:
-            print("APITimeoutError:", e)
-            return _ERR_TIMEOUT
-        except APIConnectionError as e:
-            print("APIConnectionError:", e)
-            return _ERR_CONNECTION
-        except APIStatusError as e:
-            print("APIStatusError:", e.status_code, e.message)
-            return _ERR_GENERIC
-        except Exception as e:
-            print("Unexpected error in ask_question:", e)
-            return _ERR_GENERIC
+        # prompt = [
+        #     {"role": "system", "content": self.prompt1},
+        #     {"role": "user",   "content": question},
+        # ]
+        #
+        # try:
+        #     response = await self.ai_model.send_message(prompt)
+        #     message = response.choices[0].message
+        #
+        #     if message.tool_calls:
+        #         result = await self.tools_call(message.tool_calls)
+        #     else:
+        #         result = message.content
+        #
+        #     return result
+        #
+        # except RateLimitError as e:
+        #     print("RateLimitError:", e)
+        #     return _ERR_RATE_LIMIT
+        # except APITimeoutError as e:
+        #     print("APITimeoutError:", e)
+        #     return _ERR_TIMEOUT
+        # except APIConnectionError as e:
+        #     print("APIConnectionError:", e)
+        #     return _ERR_CONNECTION
+        # except APIStatusError as e:
+        #     print("APIStatusError:", e.status_code, e.message)
+        #     return _ERR_GENERIC
+        # except Exception as e:
+        #     print("Unexpected error in ask_question:", e)
+        #     return _ERR_GENERIC
 
 
 main_agent = MainAgent()

@@ -40,7 +40,6 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
           preserveAspectRatio="none"
         >
           <defs>
-            {/* Лёгкое свечение вокруг комнаты */}
             <filter id="room-glow" x="-50%" y="-50%" width="200%" height="200%">
               <feGaussianBlur stdDeviation="0.6" result="blur" />
               <feMerge>
@@ -50,30 +49,13 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
             </filter>
           </defs>
 
-          {/* Маска: затемняем всё, кроме целевой комнаты */}
-          <mask id="dim-mask">
-            <rect x="0" y="0" width="100" height="100" fill="white" />
-            <rect
-              x={target.x}
-              y={target.y}
-              width={target.w}
-              height={target.h}
-              fill="black"
-            />
-          </mask>
-          <rect
-            x="0" y="0" width="100" height="100"
-            fill="rgba(0,0,0,0.35)"
-            mask="url(#dim-mask)"
-          />
-
-          {/* Подсветка целевой комнаты */}
+          {/* Подсветка целевой комнаты без затемнения фона */}
           <rect
             x={target.x}
             y={target.y}
             width={target.w}
             height={target.h}
-            fill="oklch(0.56 0.215 262 / 0.42)"
+            fill="oklch(0.56 0.215 262 / 0.35)"
             stroke="oklch(0.56 0.215 262)"
             strokeWidth="3"
             vectorEffect="non-scaling-stroke"
@@ -81,7 +63,7 @@ export function FloorPlan({ floor, highlightRoom }: Props) {
           >
             <animate
               attributeName="fill-opacity"
-              values="1; 0.55; 1"
+              values="0.35; 0.15; 0.35"
               dur="2.2s"
               repeatCount="indefinite"
             />

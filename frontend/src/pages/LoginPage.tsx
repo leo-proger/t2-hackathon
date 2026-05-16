@@ -114,9 +114,6 @@ export function LoginPage() {
             {loading ? 'Входим…' : 'Войти'}
           </button>
 
-          <p className="text-center text-[12px] text-muted-foreground/60 mt-1">
-            artem@kgu.ru · student123
-          </p>
         </form>
       </div>
     </main>

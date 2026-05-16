@@ -22,8 +22,10 @@ class UserMeMapper:
         return UserMeSchema(
             id=model.id,
             name=model.name,
+            surname=model.surname,
             faculty=model.faculty,
             group=model.group,
+            groupID=model.groupID,
             year=model.year,
             simestr=model.simestr,
             xp=model.xp,

@@ -20,8 +20,10 @@ class UserNewDataSchema(BaseModel):
 class UserMeSchema(BaseModel):
     id: int
     name: str
+    surname: str
     faculty:str
     group: str
+    groupID: int
     status: str
     year: int
     simestr: int

@@ -51,8 +51,8 @@ npm run dev
 #### `GET /api/users/me`
 ```json
 {
-  "id": 1, "name": "Артём", "faculty": "ИВИТШ",
-  "group": "00-XXбо-0", "status": "student", "year": 1, "simestr": 1,
+  "id": 1, "name": "Артём", "faculty": "ИВИТШ", "group": "00-XXбо-0",
+  "groupID": 1, "status": "student", "year": 1, "simestr": 1,
   "xp": 340, "level": 3, "levelProgress": 40, "adaptationProgress": 62
 }
 // levelProgress - прогресс уровня, status: "student" or "teacher"

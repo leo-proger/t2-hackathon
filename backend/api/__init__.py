@@ -36,7 +36,7 @@ async def add_base():
         date_of_birth=None
     ))
     session.add(UserModel(
-        group="",
+        group="25-ИСбо-1",
         groupID=1,
 
         name="Вася",
@@ -50,8 +50,8 @@ async def add_base():
         date_of_birth=None
     ))
     session.add(UserModel(
-        group="",
-        groupID=0,
+        group="25-ИСбо-2",
+        groupID=2,
 
         name="Ася",
         surname="Рыжёва",

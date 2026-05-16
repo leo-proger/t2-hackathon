@@ -1,8 +1,9 @@
-import { NavLink as RouterLink } from 'react-router-dom'
-import { Sparkles, Zap } from 'lucide-react'
+import { NavLink as RouterLink, Link } from 'react-router-dom'
+import { Sparkles, Zap, LogOut } from 'lucide-react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { cn } from '@/lib/utils'
 import { useUser } from '@/hooks/useUser'
+import { useAuth } from '@/contexts/AuthContext'
 
 const NAV_LINKS = [
   { label: 'Главная',     to: '/' },
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 
 export function Navbar() {
   const { data: user } = useUser()
+  const { isAuthenticated, logout } = useAuth()
 
   return (
     <nav className="flex items-center justify-between px-5 py-3.5 border-b border-border/60 backdrop-blur-md bg-background/80 sticky top-0 z-50">
@@ -47,12 +49,31 @@ export function Navbar() {
       </div>
 
       <div className="flex items-center gap-2.5">
-        {user && <XpBadge xp={user.xp} />}
-        <Avatar className="h-8 w-8">
-          <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">
-            {user?.initials ?? '…'}
-          </AvatarFallback>
-        </Avatar>
+        {isAuthenticated ? (
+          <>
+            {user && <XpBadge xp={user.xp} />}
+            <Avatar className="h-8 w-8">
+              <AvatarFallback className="bg-primary/15 text-primary text-xs font-semibold">
+                {user?.initials ?? '…'}
+              </AvatarFallback>
+            </Avatar>
+            <button
+              type="button"
+              onClick={logout}
+              title="Выйти"
+              className="flex items-center justify-center h-8 w-8 rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
+            >
+              <LogOut size={15} />
+            </button>
+          </>
+        ) : (
+          <Link
+            to="/login"
+            className="rounded-lg bg-primary text-primary-foreground px-4 py-1.5 text-[13px] font-semibold hover:opacity-90 transition-opacity"
+          >
+            Войти
+          </Link>
+        )}
       </div>
     </nav>
   )

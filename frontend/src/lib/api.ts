@@ -19,6 +19,7 @@ class HttpError extends Error {
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE_URL}${path}`, {
+    credentials: 'include',  // отправляем куки JWT с каждым запросом
     headers: { 'Content-Type': 'application/json', ...init?.headers },
     ...init,
   })

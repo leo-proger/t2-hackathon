@@ -5,6 +5,7 @@ import { useQuests } from '@/hooks/useQuests'
 import { WelcomeCard } from '@/components/dashboard/WelcomeCard'
 import { ScheduleCard } from '@/components/dashboard/ScheduleCard'
 import { QuestsCard } from '@/components/dashboard/QuestsCard'
+import { SovetDayCard } from '@/components/dashboard/SovetDayCard'
 import { PageTransition } from '@/components/PageTransition'
 
 export function DashboardPage() {
@@ -14,6 +15,8 @@ export function DashboardPage() {
   return (
     <PageTransition>
     <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-3">
+      <SovetDayCard />
+
       <WelcomeCard user={user} loading={userLoading} />
 
       <Link

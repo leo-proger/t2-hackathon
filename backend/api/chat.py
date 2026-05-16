@@ -11,61 +11,52 @@ from backend.secret_model import user_request_validity
 
 router = APIRouter(prefix='/chat', tags=['chat'])
 
-def mess_to_format(message, role, id_message):
-    d = {
+
+def mess_to_format(message, role, id_message) -> dict:
+    return {
         "message": {
             "id": id_message,
             "role": role,
-            "text": message,
+            "text": message or "",
             "timestamp": str(datetime.datetime.now())
         }
     }
-    return d
 
 
 @router.get('/history')
-async def history(request: Request, session: SessionDep):
-    """
-    :param request:
-    :param session:
-    :return:
-    """
-
+async def get_history(request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
-    # try:
-    print(user.chat_history)
-    return json.loads(f"[{user.chat_history}]")
-    # except Exception as e:
-    #     print(e)
-    #     return f"[{user.chat_history}]"
+    raw = (user.chat_history or "").strip()
+    if not raw:
+        return []
+
+    try:
+        return json.loads(f"[{raw}]")
+    except json.JSONDecodeError:
+        user.chat_history = ""
+        user.count_messages = 0
+        await session.commit()
+        return []
 
 
 @router.post('/message')
-async def history(message: MessageSchema, request: Request, session: SessionDep):
-    """
-    :param request:
-    :param session:
-    :return:
-    """
-
+async def send_message(message: MessageSchema, request: Request, session: SessionDep):
     user = await user_request_validity(request, StatusEnum.all, session)
 
-    data = await main_agent.ask_question(message.text)
+    # ask_question всегда возвращает строку (ошибки обработаны внутри)
+    bot_text = await main_agent.ask_question(message.text)
 
-    if user.count_messages == 0:
-        history = ""
-    else:
-        history = user.chat_history + ", "
+    user_msg = mess_to_format(message.text, 'user', user.count_messages)
+    bot_msg  = mess_to_format(bot_text,     'bot',  user.count_messages + 1)
 
-    bot_say = mess_to_format(data, 'bot', user.count_messages+1)
-    history += f"{mess_to_format(message.text, 'user', user.count_messages)}"
-    if data != None:
-        history += f", {bot_say}"
-        user.count_messages += 1
+    # json.dumps гарантирует валидный JSON (None→null, нет Python repr)
+    user_json = json.dumps(user_msg, ensure_ascii=False)
+    bot_json  = json.dumps(bot_msg,  ensure_ascii=False)
 
-    user.chat_history = history.replace("'", "\"").replace("None", "null")
-    user.count_messages += 1
+    separator = ", " if user.count_messages > 0 and user.chat_history else ""
+    user.chat_history = (user.chat_history or "") + separator + user_json + ", " + bot_json
+    user.count_messages += 2
 
     await session.commit()
-    return bot_say
+    return bot_msg

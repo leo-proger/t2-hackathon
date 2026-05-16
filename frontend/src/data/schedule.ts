@@ -1,7 +1,7 @@
 import type { Lesson } from '@/types'
 
 /** Дата расписания — фиксированная заглушка пока нет бэка */
-export const SCHEDULE_DATE = new Date(2026, 4, 16) // 16 мая 2026 (месяц 0-based)
+export const SCHEDULE_DATE = new Date(2026, 4, 17) // 17 мая 2026 (месяц 0-based)
 
 /** Время обеденного перерыва (между парами 3 и 4) */
 export const LUNCH_BREAK = { start: '13:20', end: '14:00' }

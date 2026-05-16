@@ -7,12 +7,12 @@ import { ScheduleCard } from '@/components/dashboard/ScheduleCard'
 import { QuestsCard } from '@/components/dashboard/QuestsCard'
 
 export function DashboardPage() {
-  const user = useUser()
+  const { user, loading: userLoading } = useUser()
   const quests = useQuests()
 
   return (
     <main className="p-4 md:p-6 max-w-2xl mx-auto flex flex-col gap-3">
-      <WelcomeCard user={user.data} loading={user.loading} />
+      <WelcomeCard user={user} loading={userLoading} />
 
       <Link
         to="/guide"
@@ -23,10 +23,10 @@ export function DashboardPage() {
             <Map size={18} className="text-amber-600" />
           </span>
           <div>
-            <p className="text-[13px] font-semibold text-amber-800 leading-tight">
+            <p className="text-[15px] font-semibold text-amber-900 leading-tight">
               Твой план по адаптации
             </p>
-            <p className="text-[11px] text-amber-600 mt-0.5">
+            <p className="text-[13px] text-amber-700 mt-0.5">
               Пошаговая инструкция — что делать прямо сейчас
             </p>
           </div>

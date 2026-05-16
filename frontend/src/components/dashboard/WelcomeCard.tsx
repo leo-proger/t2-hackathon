@@ -9,35 +9,44 @@ interface Props {
 export function WelcomeCard({ user, loading }: Props) {
   if (loading || !user) return <CardSkeleton />
 
+  const subtitle =
+    user.status === 'teacher'
+      ? user.faculty
+      : `${user.faculty} · ${user.group} · ${user.year} курс`
+
   return (
     <div className="rounded-2xl border border-primary/20 bg-primary/8 p-5 flex flex-col h-full overflow-hidden">
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-primary/70 mb-1">
+      <p className="text-[12px] font-semibold uppercase tracking-widest text-primary/80 mb-1">
         Добро пожаловать
       </p>
-      <h2 className="text-xl font-semibold" style={{ color: 'oklch(0.35 0.15 262)' }}>
+      <h2 className="text-2xl font-bold" style={{ color: 'oklch(0.30 0.16 262)' }}>
         Привет, {user.name} 👋
       </h2>
-      <p className="text-[12px] mt-0.5 mb-4" style={{ color: 'oklch(0.50 0.12 262)' }}>
-        {user.faculty} · {user.year} курс · {user.week} неделя
+      <p className="text-[14px] font-medium mt-1 mb-4" style={{ color: 'oklch(0.45 0.13 262)' }}>
+        {subtitle}
       </p>
 
-      <p className="text-[11px] font-medium mb-1.5" style={{ color: 'oklch(0.52 0.14 262)' }}>
-        Прогресс адаптации
-      </p>
-      <Progress
-        value={user.adaptationProgress}
-        className="h-1.5"
-        style={{ background: 'oklch(0.82 0.06 262)' } as React.CSSProperties}
-        indicatorClassName="bg-primary"
-      />
-      <div className="flex justify-between mt-1.5">
-        <span className="text-[11px]" style={{ color: 'oklch(0.52 0.14 262)' }}>
-          {user.adaptationProgress}% пройдено
-        </span>
-        <span className="text-[11px]" style={{ color: 'oklch(0.52 0.14 262)' }}>
-          уровень {user.level}
-        </span>
-      </div>
+      {user.status === 'student' && (
+        <>
+          <p className="text-[12px] font-semibold mb-1.5" style={{ color: 'oklch(0.45 0.14 262)' }}>
+            Уровень {user.level} — прогресс
+          </p>
+          <Progress
+            value={user.levelProgress}
+            className="h-2"
+            style={{ background: 'oklch(0.80 0.07 262)' } as React.CSSProperties}
+            indicatorClassName="bg-primary"
+          />
+          <div className="flex justify-between mt-1.5">
+            <span className="text-[12px] font-medium" style={{ color: 'oklch(0.45 0.14 262)' }}>
+              {user.xp} XP
+            </span>
+            <span className="text-[12px] font-medium" style={{ color: 'oklch(0.45 0.14 262)' }}>
+              {user.levelProgress}% до уровня {user.level + 1}
+            </span>
+          </div>
+        </>
+      )}
     </div>
   )
 }
@@ -46,10 +55,9 @@ function CardSkeleton() {
   return (
     <div className="rounded-2xl border border-primary/20 bg-primary/8 p-5 flex flex-col h-full gap-3 animate-pulse">
       <div className="h-2.5 w-28 rounded bg-primary/20" />
-      <div className="h-5 w-40 rounded bg-primary/20" />
-      <div className="h-2 w-32 rounded bg-primary/15" />
-      <div className="h-1.5 w-full rounded-full bg-primary/20 mt-2" />
+      <div className="h-6 w-44 rounded bg-primary/20" />
+      <div className="h-3 w-36 rounded bg-primary/15" />
+      <div className="h-2 w-full rounded-full bg-primary/20 mt-2" />
     </div>
   )
 }
-

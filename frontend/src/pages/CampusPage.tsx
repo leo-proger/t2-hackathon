@@ -12,8 +12,8 @@ export function CampusPage() {
   return (
     <main className="p-4 md:p-6 max-w-5xl mx-auto">
       <header className="mb-5">
-        <h1 className="text-2xl font-semibold tracking-tight text-foreground">Корпуса</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">
+        <h1 className="text-3xl font-bold tracking-tight text-foreground">Корпуса</h1>
+        <p className="text-[15px] text-foreground/65 font-medium mt-1">
           Выбери институт, чтобы посмотреть схему и контакты.
         </p>
       </header>
@@ -98,7 +98,7 @@ function InstituteHeader({ institute }: { institute: Institute }) {
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className={cn('text-xl font-bold', institute.isMine ? 'text-primary' : 'text-foreground')}>
+            <h2 className={cn('text-2xl font-bold', institute.isMine ? 'text-primary' : 'text-foreground')}>
               {institute.acronym}
             </h2>
             {institute.isMine && (
@@ -108,7 +108,7 @@ function InstituteHeader({ institute }: { institute: Institute }) {
               </span>
             )}
           </div>
-          <p className="text-[15px] text-foreground mt-1 leading-snug">{institute.fullName}</p>
+          <p className="text-[15px] font-medium text-foreground/80 mt-1 leading-snug">{institute.fullName}</p>
         </div>
       </div>
     </div>
@@ -122,7 +122,7 @@ function InstituteContacts({ institute }: { institute: Institute }) {
 
   return (
     <div className="rounded-2xl border border-border bg-card p-5 md:p-6 mb-4">
-      <h3 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-3">
+      <h3 className="text-[12px] font-bold uppercase tracking-widest text-foreground/60 mb-3">
         Контакты {isStub && '(будут добавлены позже)'}
       </h3>
       <ul className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -159,8 +159,8 @@ function ContactRow({
     <li className="flex gap-2.5 items-start bg-muted/40 rounded-lg p-3">
       <span className="text-muted-foreground mt-0.5">{icon}</span>
       <div className="flex flex-col min-w-0">
-        <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-medium">{label}</span>
-        <span className={cn('text-[13px] leading-snug', stub ? 'text-muted-foreground italic' : 'text-foreground')}>
+        <span className="text-[10px] uppercase tracking-wider text-foreground/50 font-bold">{label}</span>
+        <span className={cn('text-[13px] font-medium leading-snug', stub ? 'text-foreground/40 italic' : 'text-foreground/85')}>
           {content}
         </span>
       </div>
@@ -178,7 +178,7 @@ function FloorSwitcher() {
   return (
     <div className="rounded-2xl border border-border bg-card p-5 md:p-6">
       <div className="flex items-center justify-between mb-4 flex-wrap gap-3">
-        <h3 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <h3 className="text-[12px] font-bold uppercase tracking-widest text-foreground/60">
           Схема корпуса
         </h3>
         <div className="inline-flex bg-secondary rounded-lg p-1 gap-1">

@@ -36,7 +36,7 @@ export function SchedulePage() {
   return (
     <main className="p-4 md:p-6 max-w-4xl mx-auto">
       {/* Заголовок + переключатель даты */}
-      <header className="flex items-center justify-between mb-6">
+      <header className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight text-foreground">Расписание</h1>
           <p className="text-sm text-muted-foreground mt-0.5 capitalize">
@@ -116,27 +116,27 @@ function LessonItem({ lesson, showStatus }: { lesson: Lesson; showStatus: boolea
 
       {/* Инфо */}
       <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="flex flex-col gap-1">
           <div className="flex items-center gap-2 flex-wrap">
             <KindBadge kind={lesson.kind} />
-            <h3 className="text-[15px] font-semibold text-foreground leading-tight">
-              {lesson.name}
-              {lesson.subgroup && (
-                <span className="text-muted-foreground font-normal"> · {lesson.subgroup}</span>
-              )}
-            </h3>
+            {active && (
+              <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground animate-pulse" />
+                Сейчас
+              </span>
+            )}
+            {past && (
+              <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
+                Прошла
+              </span>
+            )}
           </div>
-          {active && (
-            <span className="inline-flex items-center gap-1 bg-primary text-primary-foreground text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary-foreground animate-pulse" />
-              Сейчас
-            </span>
-          )}
-          {past && (
-            <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground">
-              Прошла
-            </span>
-          )}
+          <h3 className="text-[15px] font-semibold text-foreground leading-tight">
+            {lesson.name}
+            {lesson.subgroup && (
+              <span className="text-muted-foreground font-normal"> · {lesson.subgroup}</span>
+            )}
+          </h3>
         </div>
 
         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mt-3">

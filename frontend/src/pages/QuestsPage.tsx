@@ -1,14 +1,15 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { Zap, CheckCircle2, Circle, Trophy, Medal, AlertCircle } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useQuests } from '@/hooks/useQuests'
+import { useUser } from '@/contexts/UserContext'
 import { cn } from '@/lib/utils'
 import type { LeaderboardEntry, Quest } from '@/types'
 
 const TABS = ['Мои квесты', 'Рейтинг'] as const
 type Tab = typeof TABS[number]
 
-const MOCK_LEADERBOARD: LeaderboardEntry[] = [
+const BASE_LEADERBOARD: LeaderboardEntry[] = [
   { rank: 1, name: 'Дмитрий К.',  xp: 890 },
   { rank: 2, name: 'Артём И.',    xp: 340, isMe: true },
   { rank: 3, name: 'Вася К.',     xp: 280 },
@@ -22,6 +23,17 @@ const MOCK_LEADERBOARD: LeaderboardEntry[] = [
 export function QuestsPage() {
   const [tab, setTab] = useState<Tab>('Мои квесты')
   const { data: quests, loading, error, complete } = useQuests()
+  const { user } = useUser()
+
+  // Обновляем XP «меня» в лидерборде из реального профиля и пересортируем
+  const leaderboard = useMemo(() => {
+    const entries = BASE_LEADERBOARD.map((e) =>
+      e.isMe && user ? { ...e, xp: user.xp } : e
+    )
+    return entries
+      .sort((a, b) => b.xp - a.xp)
+      .map((e, i) => ({ ...e, rank: i + 1 }))
+  }, [user?.xp])
 
   const done  = quests?.filter((q) => q.done).length ?? 0
   const total = quests?.length ?? 0
@@ -29,9 +41,9 @@ export function QuestsPage() {
   return (
     <main className="p-4 md:p-6 max-w-2xl mx-auto">
       <header className="mb-5">
-        <h1 className="text-2xl font-semibold tracking-tight">Квесты</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Квесты</h1>
         {!loading && total > 0 && (
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="text-[15px] text-foreground/70 font-medium mt-1">
             Выполнено {done} из {total} · собери XP и разблокируй следующий этап
           </p>
         )}
@@ -92,7 +104,7 @@ export function QuestsPage() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.18 }}
           >
-            <Leaderboard entries={MOCK_LEADERBOARD} />
+            <Leaderboard entries={leaderboard} />
           </motion.div>
         )}
       </AnimatePresence>
@@ -134,14 +146,14 @@ function QuestCard({ quest, onComplete }: { quest: Quest; onComplete: (id: numbe
 
       {/* Контент */}
       <div className="flex-1 min-w-0">
-        <p className={cn('text-[14px] font-semibold leading-tight', isDone && 'text-emerald-700')}>
+        <p className={cn('text-[16px] font-bold leading-tight', isDone ? 'text-emerald-700' : 'text-foreground')}>
           {quest.label}
         </p>
-        <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+        <p className="text-[13px] text-foreground/65 font-medium mt-1.5 leading-snug">
           {quest.description}
         </p>
-        <span className="inline-flex items-center gap-1 mt-2 text-[11px] font-semibold text-primary">
-          <Zap size={11} className="fill-primary" />
+        <span className="inline-flex items-center gap-1 mt-2 text-[13px] font-bold text-primary">
+          <Zap size={12} className="fill-primary" />
           +{quest.xp} XP
         </span>
       </div>
@@ -152,7 +164,7 @@ function QuestCard({ quest, onComplete }: { quest: Quest; onComplete: (id: numbe
           type="button"
           onClick={handleComplete}
           disabled={loading}
-          className="shrink-0 rounded-xl border border-primary/30 bg-primary/5 text-primary text-[12px] font-semibold px-3 py-1.5 hover:bg-primary hover:text-primary-foreground transition-all disabled:opacity-50"
+          className="shrink-0 rounded-xl border border-primary/30 bg-primary/5 text-primary text-[13px] font-bold px-4 py-2 hover:bg-primary hover:text-primary-foreground transition-all disabled:opacity-50"
         >
           {loading ? '…' : 'Выполнил'}
         </button>

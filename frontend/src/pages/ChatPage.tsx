@@ -2,10 +2,10 @@ import { useState, useEffect, useRef } from 'react'
 import { Send, Loader2, ThumbsUp, ThumbsDown, Sparkles } from 'lucide-react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useChat } from '@/hooks/useChat'
+import { createTicket } from '@/services/ticket.service'
 import { cn } from '@/lib/utils'
 
 const SUGGESTIONS = [
-  'Где находится деканат?',
   'Как получить студенческий билет?',
   'Что делать если заболел?',
   'Где столовая и когда она работает?',
@@ -21,6 +21,7 @@ export function ChatPage() {
   const { messages, loading, sending, send } = useChat()
   const [input, setInput] = useState('')
   const [feedback, setFeedback] = useState<Record<string, Feedback>>({})
+  const [disliked, setDisliked] = useState<Set<string>>(new Set())
   const bottomRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -45,6 +46,14 @@ export function ChatPage() {
   }
 
   function toggleFeedback(id: string, value: Feedback) {
+    if (value === 'down') {
+      if (disliked.has(id)) return
+      const msg = messages.find((m) => m.id === id)
+      if (msg) void createTicket(msg.text)
+      setDisliked((prev) => new Set(prev).add(id))
+      setFeedback((prev) => ({ ...prev, [id]: 'down' }))
+      return
+    }
     setFeedback((prev) => ({
       ...prev,
       [id]: prev[id] === value ? undefined as unknown as Feedback : value,

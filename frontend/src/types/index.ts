@@ -1,18 +1,20 @@
 // ─── User & Profile ──────────────────────────────────────────────────────────
 
+export type UserStatus = 'student' | 'teacher'
+
 export interface User {
-  id: string
-  name: string        // "Артём"
-  initials: string    // "АИ"
-  faculty: string     // "ИВИТШ"
-  year: number        // 1
-  week: number        // 3
+  id: number
+  name: string           // "Артём"
+  initials: string       // генерится из name на фронте
+  faculty: string        // "ИВИТШ"
+  group: string          // "00-XXбо-0"
+  year: number           // 1
+  simestr: number        // 1
   xp: number
   level: number
+  levelProgress: number  // 0-100, % прогресса внутри уровня
   adaptationProgress: number  // 0-100
-  streakDays: number
-  /** true = день засчитан, порядок от старого к новому */
-  streakHistory: boolean[]
+  status: UserStatus
 }
 
 // ─── Schedule ─────────────────────────────────────────────────────────────────
@@ -95,4 +97,12 @@ export interface ApiError {
   ok: false
   status: number
   message: string
+}
+
+// ─── Tickets ──────────────────────────────────────────────────────────────────
+
+export interface Ticket {
+  id: number
+  question: string
+  answer?: string
 }

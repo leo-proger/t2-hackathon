@@ -11,9 +11,7 @@ export function LandingPage() {
           <img
             src="/mascot.png"
             alt="Chattie"
-            width={280}
-            height={280}
-            className="select-none drop-shadow-xl"
+            className="w-40 md:w-[280px] select-none drop-shadow-xl"
             style={{ mixBlendMode: 'multiply' }}
           />
         </div>

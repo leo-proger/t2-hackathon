@@ -7,17 +7,18 @@ import type {
 } from '@/types'
 
 export const mockUser: User = {
-  id: 'u1',
+  id: 1,
   name: 'Артём',
   initials: 'АИ',
   faculty: 'ИВИТШ',
+  group: '22-ПИбо-1',
   year: 1,
-  week: 3,
+  simestr: 1,
   xp: 340,
   level: 3,
+  levelProgress: 40,
   adaptationProgress: 62,
-  streakDays: 7,
-  streakHistory: [true, true, true, true, true, true, true],
+  status: 'student',
 }
 
 export const mockQuests: Quest[] = [

@@ -52,10 +52,10 @@ npm run dev
 ```json
 {
   "id": 1, "name": "Артём", "faculty": "ИВИТШ",
-  "group": "00-XXбо-0", "year": 1, "simestr": 1,
+  "group": "00-XXбо-0", "status": "student", "year": 1, "simestr": 1,
   "xp": 340, "level": 3, "levelProgress": 40, "adaptationProgress": 62
 }
-// levelProgress - прогресс уровня.
+// levelProgress - прогресс уровня, status: "student" or "teacher"
 ```
 
 ### Расписание

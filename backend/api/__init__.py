@@ -9,6 +9,7 @@ from backend.api.events import router as events_router
 from backend.api.lessons import router as lessons_router
 from backend.api.users import router as users_router
 from backend.api.quests import router as quests_router
+from backend.api.chat import router as chat_router
 
 from backend.database import engine, Base, new_session
 from backend.models.quest import QuestModel
@@ -19,13 +20,6 @@ main_router = APIRouter()
 
 async def add_base():
     session = new_session()
-    # session.add(GroupModel(
-    #     groupID=0,
-    #     name="zero",
-    #     kurs=0,
-    #     facul="zero",
-    #     yearName="0-0",
-    # ))
     session.add(UserModel(
         group="",
         groupID=0,
@@ -41,7 +35,7 @@ async def add_base():
         date_of_birth=None
     ))
 
-    with pathlib.Path('quests.json').open("r", encoding='utf-8') as f:
+    with pathlib.Path('data_files/quests.json').open("r", encoding='utf-8') as f:
         data = json.load(f)
 
     for quest in data:
@@ -75,8 +69,7 @@ main_router.include_router(lessons_router)
 main_router.include_router(users_router)
 main_router.include_router(events_router)
 main_router.include_router(quests_router)
-# main_router.include_router(chats_router)
-# main_router.include_router(messages_router)
+main_router.include_router(chat_router)
 
 
 @main_router.get('/get_admin_key')

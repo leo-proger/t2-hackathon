@@ -40,7 +40,6 @@ def test_passw(text, rezult):
 
 
 def generate_password(id: int):
-    # password = str(id) + ''.join(random.sample(string.ascii_letters + string.digits, random.randint(7, 12)))
     password = "string"
     return password, hashing(password)
 
@@ -48,12 +47,13 @@ def generate_password(id: int):
 async def user_request_validity(request, statuses: StatusEnum | list[StatusEnum] = None, session=None):
     valid_time_count_request(request)
 
-    if not statuses is None:
+    if statuses is not None:
         data = await valid_token(request)
 
-        # print(52, data)
         user = await valid_user_statuses(data.sub, statuses, session)
         return user
+
+    return None
 
 
 def valid_time_count_request(request):
@@ -103,12 +103,11 @@ async def valid_user_statuses(data, statuses, session):
     if type(statuses) != list:
         statuses = [statuses]
 
-    # print(f"return {user.status in statuses}, {user}")
     if user.status in statuses + [StatusEnum.zero]:
         if lock:
             return user
         await session.close()
-        return
+        return None
 
     raise HTTPException(status_code=403, detail=f"Insufficient authority")
 

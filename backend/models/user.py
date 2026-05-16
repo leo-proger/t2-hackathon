@@ -1,7 +1,7 @@
 import datetime
 import enum
 
-from sqlalchemy.orm import Mapped
+from sqlalchemy.orm import Mapped, mapped_column
 
 from backend.database import Base, intpk
 
@@ -41,6 +41,7 @@ class UserModel(Base):
     date_of_birth: Mapped[datetime.date | None]
 
     quests: Mapped[int] = 0
+    chat_history: Mapped[str] = mapped_column(default="")
 
     # fullName: Mapped[str]
     # middle_name: Mapped[str | None]

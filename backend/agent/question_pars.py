@@ -2,7 +2,7 @@ import asyncio
 import pathlib
 import json
 
-from backend.AI_model import AIModel
+from backend.agent.AI_model import AIModel
 from backend.core import CORE
 
 
@@ -16,34 +16,51 @@ class QuestionParser:
     questions: dict[str, str]
     ai_model: AIModel
     prompt1 = str
+    prompt2 = str
+    prompt_lite = str
 
     def __init__(self):
         self.questions = {}
-        with pathlib.Path('prompt_question_answer.md').open('r') as f:
+        with pathlib.Path('data_files/prompt_question_answer.md').open('r', encoding='utf-8') as f:
             self.prompt1 = f.read()
+
+        with pathlib.Path('data_files/prompt_question_answer2.md').open('r', encoding='utf-8') as f:
+            self.prompt2 = f.read()
+
+        with pathlib.Path('data_files/knowledge_base.md').open('r', encoding='utf-8') as f:
+            self.prompt_lite = f.read()
 
         self.ai_model = AIModel(
             CORE.model_url, CORE.model_name, CORE.api_key
         )
         self.__update_questions()
 
+    async def new_question_litle(self, query: str):
+        raw_answer = await self.ai_model.send_question([
+            {
+                "role": "system",
+                "content": self.prompt_lite
+            },
+            {
+                "role": "user",
+                "content": query
+            }
+        ])
 
-    async def new_question(self, question: str):
-        list_questions = list(enumerate(self.questions))
-        user_prompt = f"""Новый запрос: {question}
-Существующие вопросы: {list_questions}"""
-        prompt = [
+        return raw_answer.choices[0].message.content
+
+    async def new_question_big(self, query: str):
+        raw_answer = await self.ai_model.send_question([
             {
                 "role": "system",
                 "content": self.prompt1
             },
             {
                 "role": "user",
-                "content": user_prompt
+                "content": f"""Новый запрос: {query}
+Существующие вопросы: {list(enumerate(self.questions))}"""
             }
-        ]
-
-        raw_answer = await self.ai_model.send_question(prompt)
+        ])
 
         result: dict[str, str | int | None | list[int]]
 
@@ -53,33 +70,50 @@ class QuestionParser:
         except json.JSONDecodeError:
             result = {"type": "none", "main": None, "near": []}
 
-        answers = []
 
         if result["type"] == "none":
-            ...
+            answer = None
         elif result["type"] == "main":
-            answers.append(
-                get_answer(self.questions, result["main"])
-            )
+            answer = get_answer(self.questions, result["main"])
+
         elif result["type"] == "near":
+            answers = []
+
             for i in result["near"]:
                 answers.append(
                     get_answer(self.questions, i)
                 )
 
-        print(result)
-        print(answers)
+            raw_answer = await self.ai_model.send_question([
+                {
+                    "role": "system",
+                    "content": self.prompt1
+                },
+                {
+                    "role": "user",
+                    "content": f"""Вопрос пользователя: {query}
+Похожие ответы: {answers}"""
+                }
+            ])
+            answer = raw_answer.choices[0].message.content
+        else:
+            raise TypeError
+
+
+        # print(result)
+        # print(answers)
+        return answer
 
     def get_question(self) -> dict[str, str]:
         return self.questions
 
     def add_answer(self, question: str, answer: str) -> None:
         self.questions[question] = answer
-        with pathlib.Path('question_base.json').open('w', encoding="utf-8") as f:
+        with pathlib.Path('data_files/question_base.json').open('w', encoding="utf-8") as f:
             f.write(json.dumps(self.questions))
 
     def __update_questions(self):
-        with pathlib.Path('question_base.json').open("r") as f:
+        with pathlib.Path('data_files/question_base.json').open("r", encoding='utf-8') as f:
             self.questions = json.load(f)
 
 

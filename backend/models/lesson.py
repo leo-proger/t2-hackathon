@@ -1,5 +1,5 @@
 import datetime
-y
+
 from sqlalchemy.orm import Mapped
 
 from backend.database import Base, intpk

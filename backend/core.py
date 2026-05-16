@@ -8,7 +8,7 @@ class Core:
     count_quests: int
 
     def __init__(self):
-        with pathlib.Path("core.cr").open("r") as f:
+        with pathlib.Path("data_files/core.cr").open("r") as f:
             data = json.load(f)
             for key, value in data.items():
                 self.__dict__[key] = value

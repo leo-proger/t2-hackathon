@@ -16,7 +16,7 @@ app = FastAPI()
 #     allow_origins=["*"],
 # )
 
-app.include_router(main_router)
+app.include_router(main_router, prefix="/api")
 security.handle_errors(app)
 
 

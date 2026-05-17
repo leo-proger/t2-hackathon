@@ -1,6 +1,11 @@
 # Chattie — цифровой помощник для адаптации студентов
 
-Проект на хакатон Tele2.
+## Промо ролик
+https://youtu.be/9ll-MEvQ0mA
+
+## Презентация
+[![View PDF](https://shields.io)](https://github.com/leo-proger/t2-hackathon/blob/5cd73d3a2b2ec8039473ca38d76135abd23af1d8/presentation.pdf)
+
 
 ## Структура репозитория
 

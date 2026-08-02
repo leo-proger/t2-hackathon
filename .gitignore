@@ -1,5 +1,7 @@
 # -------- Корень --------
 .idea/
+.omc/
+.serena/
 .vscode/*
 !.vscode/extensions.json
 
